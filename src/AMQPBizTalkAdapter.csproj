@@ -57,21 +57,21 @@
   </Target>
   -->
   <ItemGroup>
-    <Compile Include="AMQPBizTalkAdapter.cs" />
-    <Compile Include="AMQPBizTalkAdapterBinding.cs" />
-    <Compile Include="AMQPBizTalkAdapterBindingElement.cs" />
-    <Compile Include="AMQPBizTalkAdapterBindingElementExtensionElement.cs" />
-    <Compile Include="AMQPBizTalkAdapterConnectionFactory.cs" />
-    <Compile Include="AMQPBizTalkAdapterConnection.cs" />
-    <Compile Include="AMQPBizTalkAdapterHandlerBase.cs" />
-    <Compile Include="AMQPBizTalkAdapterInboundHandler.cs" />
-    <Compile Include="AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
-    <Compile Include="AMQPBizTalkAdapterMetadataResolverHandler.cs" />
-    <Compile Include="AMQPBizTalkAdapterMetadataSearchHandler.cs" />
-    <Compile Include="AMQPBizTalkAdapterOutboundHandler.cs" />
-    <Compile Include="AMQPBizTalkAdapterBindingCollectionElement.cs" />
-    <Compile Include="AMQPBizTalkAdapterTrace.cs" />
-    <Compile Include="AMQPBizTalkAdapterConnectionUri.cs" />
+    <Compile Include="Adapter\AMQPBizTalkAdapter.cs" />
+    <Compile Include="Configuration\AMQPBizTalkAdapterBinding.cs" />
+    <Compile Include="Configuration\AMQPBizTalkAdapterBindingElement.cs" />
+    <Compile Include="Configuration\AMQPBizTalkAdapterBindingElementExtensionElement.cs" />
+    <Compile Include="Connection\AMQPBizTalkAdapterConnectionFactory.cs" />
+    <Compile Include="Connection\AMQPBizTalkAdapterConnection.cs" />
+    <Compile Include="Adapter\AMQPBizTalkAdapterHandlerBase.cs" />
+    <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
+    <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
+    <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />
+    <Compile Include="MetaData\AMQPBizTalkAdapterMetadataSearchHandler.cs" />
+    <Compile Include="Messaging\AMQPBizTalkAdapterOutboundHandler.cs" />
+    <Compile Include="Configuration\AMQPBizTalkAdapterBindingCollectionElement.cs" />
+    <Compile Include="Helpers\AMQPBizTalkAdapterTrace.cs" />
+    <Compile Include="Connection\AMQPBizTalkAdapterConnectionUri.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
