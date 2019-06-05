@@ -41,7 +41,20 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement the metadata browse on the target system.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            if (MetadataRetrievalNode.Root.NodeId.Equals(nodeId))
+            {
+                MetadataRetrievalNode node = new MetadataRetrievalNode(MetaDataHelper.rootNodeId);
+                node.DisplayName = MetaDataHelper.rootNodeId;
+                node.IsOperation = false;
+                node.Description = "This category contains inbound and outbound Operations.";
+                node.Direction = MetadataRetrievalNodeDirections.Inbound | MetadataRetrievalNodeDirections.Outbound;
+                return new MetadataRetrievalNode[] { node };
+            }
+            if (MetaDataHelper.rootNodeId.CompareTo(nodeId) == 0)
+            {
+                return MetaDataHelper.GetMetadataRetrievalNodeList();
+            }
+            return null;
         }
 
         #endregion IMetadataBrowseHandler Members

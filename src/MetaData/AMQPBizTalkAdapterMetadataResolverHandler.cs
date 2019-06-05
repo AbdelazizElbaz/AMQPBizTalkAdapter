@@ -37,7 +37,7 @@ namespace AMQPBizTalkAdapter
             //TODO: Check the validity of the operation metadata on the target system.
             //      Examples include identifying any relevant changes in the target system, expiration of validity time interval etc.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            return true;
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace AMQPBizTalkAdapter
             //TODO: Check the validity of the type metadata on the target system.
             //      Metadata validity might constitute things like changes, expiry and etc.
 
-            throw new NotImplementedException("The method or operation is not implemented.");
+            return true;
         }
 
         /// <summary>
@@ -67,7 +67,61 @@ namespace AMQPBizTalkAdapter
             //      as implementation of the OperationMetadata base class.
             //      Operation metadata represents operation signature, return type and etc.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            extraTypeMetadataResolved = null;
+            switch (operationId)
+            {
+                case MetaDataHelper.ReceiveOperationNodeId:
+                    {
+                        ParameterizedOperationMetadata om = new ParameterizedOperationMetadata(operationId, MetaDataHelper.ReceiveOperation);
+                        om.OriginalName = MetaDataHelper.ReceiveOperation;
+                        om.Description = MetaDataHelper.ReceiveOperationDescription;
+                        om.OperationGroup = "AmqpInboundContract";
+                        om.OperationNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE;
+                        om.NeverExpires = true;
+                        ComplexQualifiedType cqtWso2Message = new ComplexQualifiedType("Types/AmqpMessageMetaData");
+                        //OperationParameter parmMessage = new OperationParameter("Wso2Message", OperationParameterDirection.Out, cqtWso2Message, false);
+                        // parmMessage.Description = "Message From WSO2";
+                        // om.Parameters.Add(parmMessage);
+                        //om.OperationResult = new OperationResult(cqtMessage, false);
+                        om.OperationResult = new OperationResult(cqtWso2Message, false);
+
+                        // resolve extra typemetadata here  
+                        extraTypeMetadataResolved = new TypeMetadataCollection();
+
+                        // use a predefined schema to generate metadata for this type  
+                        AmqpMessageMetaData wso2MessageMetaData = new AmqpMessageMetaData("Types/AmqpMessageMetaData", "ReceiveMessage");
+                        extraTypeMetadataResolved.Add(wso2MessageMetaData);
+
+                        return om;
+                    }
+                case MetaDataHelper.SendOperationNodeId:
+                    {
+                        ParameterizedOperationMetadata om = new ParameterizedOperationMetadata(operationId, MetaDataHelper.SendOperation);
+                        om.OriginalName = MetaDataHelper.SendOperation;
+                        om.Description = MetaDataHelper.SendOperationDescription;
+                        om.OperationGroup = "AmqpOutboundContract";
+                        om.OperationNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE;
+
+                        ComplexQualifiedType cqtWso2MessageRequest = new ComplexQualifiedType("Types/AmqpMessageMetaData");
+
+                        OperationParameter parmMessage = new OperationParameter("SendMessageRequest", OperationParameterDirection.In, cqtWso2MessageRequest, false);
+                        om.Parameters.Add(parmMessage);
+
+                        ComplexQualifiedType cqtWso2MessageResponse = new ComplexQualifiedType("Types/AmqpMessageMetaData");
+                        // resolve extra typemetadata here  
+                        extraTypeMetadataResolved = new TypeMetadataCollection();
+                        AmqpMessageMetaData wso2MessageMetaDataRequest = new AmqpMessageMetaData("Types/Wso2MessageMetaData", "SendMessageRequest");
+                        AmqpMessageMetaData wso2MessageMetaDataRespense = new AmqpMessageMetaData("Types/Wso2MessageMetaData", "SendMessageResponse");
+                        extraTypeMetadataResolved.Add(wso2MessageMetaDataRequest);
+                        extraTypeMetadataResolved.Add(wso2MessageMetaDataRespense);
+
+                        om.OperationResult = new OperationResult(cqtWso2MessageResponse, false);
+                        return om;
+                    }
+
+                default:
+                    throw new AdapterException("Cannot resolve metadata for operation identifier " + operationId);
+            }
         }
 
         /// <summary>
@@ -78,13 +132,13 @@ namespace AMQPBizTalkAdapter
         {
             extraTypeMetadataResolved = null;
 
-            //
-            //TODO: Retrieve type metadata from the target system and present it 
-            //      as an implementation of the OperationMetadata base class.
-            //      Type metadata represents target system supported types 
-            //      as passed and returned through operation parameters.
-            //
-            throw new NotImplementedException("The method or operation is not implemented.");
+                //
+                //TODO: Retrieve type metadata from the target system and present it 
+                //      as an implementation of the OperationMetadata base class.
+                //      Type metadata represents target system supported types 
+                //      as passed and returned through operation parameters.
+                //
+                return null;
         }
 
         #endregion IMetadataResolver Members
