@@ -68,7 +68,9 @@
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
     <Compile Include="Messaging\AmqpMessage.cs" />
-    <Compile Include="Messaging\AmqpPublisher.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpNotification.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpPublisher.cs" />
+    <Compile Include="Messaging\RabbitMq\RabbitMQConsumerBase.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataSearchHandler.cs" />

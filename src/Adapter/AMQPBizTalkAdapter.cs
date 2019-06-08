@@ -44,7 +44,9 @@ namespace AMQPBizTalkAdapter
         private int poolingLot;
 
 
-        private string inboundOperationType;
+        private InboundOperationType inboundOperationType;
+
+        private string routingKey;
 
         #endregion Custom Generated Fields
 
@@ -168,8 +170,8 @@ namespace AMQPBizTalkAdapter
 
 
 
-        [System.Configuration.ConfigurationProperty("inboundOperationType", DefaultValue = "Notification")]
-        public string InboundOperationType
+        [System.Configuration.ConfigurationProperty("inboundOperationType", DefaultValue = InboundOperationType.Notification)]
+        public InboundOperationType InboundOperationType
         {
             get
             {
@@ -178,6 +180,21 @@ namespace AMQPBizTalkAdapter
             set
             {
                 this.inboundOperationType = value;
+            }
+        }
+
+        [System.ComponentModel.Description("RoutingKey to filter messages from topic")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("RoutingKey", DefaultValue = "QueueName")]
+        public string RoutingKey
+        {
+            get
+            {
+                return this.routingKey;
+            }
+            set
+            {
+                this.routingKey = value;
             }
         }
 

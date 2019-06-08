@@ -84,7 +84,9 @@ namespace AMQPBizTalkAdapter
         private int poolingLot;
 
 
-        private string inboundOperationType;
+        private InboundOperationType inboundOperationType;
+
+        private string routingKey;
 
         #endregion Custom Generated Fields
 
@@ -194,6 +196,7 @@ namespace AMQPBizTalkAdapter
                 this.encoding = value;
             }
         }
+        
 
 
         [System.ComponentModel.Description("GenNewGUID : the SendPort will generate a new guid for every message, you can put a unique Id for all messages.")]
@@ -246,8 +249,8 @@ namespace AMQPBizTalkAdapter
 
         [System.ComponentModel.Description("Indicates the inbound operation to be performed : Pooling or Notification")]
         [System.ComponentModel.Category("Configuration")]
-        [System.Configuration.ConfigurationProperty("inboundOperationType", DefaultValue = "Notification")]
-        public string InboundOperationType
+        [System.Configuration.ConfigurationProperty("inboundOperationType", DefaultValue = InboundOperationType.Notification)]
+        public InboundOperationType InboundOperationType
         {
             get
             {
@@ -258,7 +261,20 @@ namespace AMQPBizTalkAdapter
                 this.inboundOperationType = value;
             }
         }
-
+        [System.ComponentModel.Description("RoutingKey to filter messages from topic")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("RoutingKey", DefaultValue = "QueueName")]
+        public string RoutingKey
+        {
+            get
+            {
+                return this.routingKey;
+            }
+            set
+            {
+                this.routingKey = value;
+            }
+        }
         #endregion Custom Generated Properties
 
         #region Private Properties
@@ -276,6 +292,7 @@ namespace AMQPBizTalkAdapter
                 binding.Interval = this.Interval;
                 binding.PoolingLot = this.PoolingLot;
                 binding.InboundOperationType = this.InboundOperationType;
+                binding.RoutingKey = this.RoutingKey;
                 return binding;
             }
         }

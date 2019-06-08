@@ -155,6 +155,20 @@ namespace AMQPBizTalkAdapter
             }
         }
 
+        [System.ComponentModel.Description("RoutingKey to filter messages from topic")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("RoutingKey", DefaultValue = "QueueName")]
+        public string RoutingKey
+        {
+            get
+            {
+                return ((string)(base["RoutingKey"]));
+            }
+            set
+            {
+                base["RoutingKey"] = value;
+            }
+        }
         #endregion Custom Generated Properties
 
         #region Protected Properties
@@ -188,6 +202,7 @@ namespace AMQPBizTalkAdapter
             this["Interval"] = adapterBinding.Interval;
             this["PoolingLot"] = adapterBinding.PoolingLot;
             this["InboundOperationType"] = adapterBinding.InboundOperationType;
+            this["RoutingKey"] = adapterBinding.RoutingKey;
         }
 
         /// <summary>
@@ -205,7 +220,8 @@ namespace AMQPBizTalkAdapter
             adapterBinding.MessageId = (System.String)this["MessageId"];
             adapterBinding.Interval = (System.Int32)this["Interval"];
             adapterBinding.PoolingLot = (System.Int32)this["PoolingLot"];
-            adapterBinding.InboundOperationType = (System.String)this["InboundOperationType"];
+            adapterBinding.InboundOperationType = (InboundOperationType)this["InboundOperationType"];
+            adapterBinding.RoutingKey = (System.String)this["RoutingKey"];
         }
 
         /// <summary>
@@ -224,7 +240,8 @@ namespace AMQPBizTalkAdapter
                     configProperties.Add(new ConfigurationProperty("MessageId", typeof(System.String), "GenNewGuid", null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("Interval", typeof(System.Int32), (System.Int32)30, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("PoolingLot", typeof(System.Int32), (System.Int32)10, null, null, ConfigurationPropertyOptions.None));
-                    configProperties.Add(new ConfigurationProperty("InboundOperationType", typeof(System.String), "Notification", null, null, ConfigurationPropertyOptions.None));
+                    configProperties.Add(new ConfigurationProperty("InboundOperationType", typeof(InboundOperationType), InboundOperationType.Notification, null, null, ConfigurationPropertyOptions.None));
+                    configProperties.Add(new ConfigurationProperty("RoutingKey", typeof(string), "QueueName", null, null, ConfigurationPropertyOptions.None));
                     this.properties = configProperties;
                 }
                 return this.properties;

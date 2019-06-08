@@ -37,18 +37,17 @@ namespace AMQPBizTalkAdapter
         {
             try
             {
-                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Call RabbitMQPublisher.Send");
+                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Call AmqpPublisher.Publish");
                 XmlDictionaryReader inputReader = wcfmessage.GetReaderAtBodyContents();
 
                 var request = Helpers.Helper.Deserialize<SendMessageRequest>(inputReader.ReadOuterXml().Trim());
                 inputReader.Close();
 
-                using (var RabbitMQConnection = connection.CreateRabbitMQConnectionFactory(openTimeOut).CreateConnection())
+                using (var rmqconnection = connection.CreateRabbitMQConnectionFactory(openTimeOut).CreateConnection())
                 {
-                    using (IModel RabbitMQModel = RabbitMQConnection.CreateModel())
+                    using (IModel Model = rmqconnection.CreateModel())
                     {
-                        // string routingKey = this.QueueTopicName;
-                        IBasicProperties basicProperties = RabbitMQModel.CreateBasicProperties();
+                        IBasicProperties basicProperties = Model.CreateBasicProperties();
 
                         Helpers.Helper.GetBasicPropertiesFromMessage(request, ref basicProperties, mEncoding);
 
@@ -59,17 +58,17 @@ namespace AMQPBizTalkAdapter
 
                         if (IsQueue)
                         {
-                            methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Send Message to Queue :   " + this.QueueName);
+                            methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Publish Message to Queue :   " + this.QueueName);
                             //Queue
-                            RabbitMQModel.ExchangeDeclare("amq.direct", "direct");
-                            RabbitMQModel.BasicPublish("amq.direct", this.QueueName, basicProperties, messageBytes);
+                            Model.ExchangeDeclare("amq.direct", "direct");
+                            Model.BasicPublish("amq.direct", this.QueueName, basicProperties, messageBytes);
                         }
                         else
                         {
-                            methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Send Message to Topic :   " + this.QueueName);
+                            methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Publish Message to Topic :   " + this.QueueName);
                             //Topic
-                            RabbitMQModel.ExchangeDeclare(exchangeTopic, "topic");
-                            RabbitMQModel.BasicPublish(exchangeTopic, this.QueueName, basicProperties, messageBytes);
+                            Model.ExchangeDeclare(exchangeTopic, "topic");
+                            Model.BasicPublish(exchangeTopic, this.QueueName, basicProperties, messageBytes);
                         }
 
                     }
@@ -80,6 +79,7 @@ namespace AMQPBizTalkAdapter
                 methodTracer.TraceError(ex.ToString());
                 throw new AdapterException(ex.Message, ex);
             }
+            methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "End AmqpPublisher.Publish");
         }
 
     }
