@@ -78,12 +78,12 @@ namespace AMQPBizTalkAdapter
 
         [System.ComponentModel.Description("Message body and Header encoding")]
         [System.ComponentModel.Category("Message")]
-        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = "UTF8")]
-        public string Encoding
+        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = EncodingEnum.UTF8)]
+        public EncodingEnum Encoding
         {
             get
             {
-                return ((string)(base["Encoding"]));
+                return ((EncodingEnum)(base["Encoding"]));
             }
             set
             {
@@ -201,7 +201,7 @@ namespace AMQPBizTalkAdapter
             AMQPBizTalkAdapterBinding adapterBinding = (AMQPBizTalkAdapterBinding)binding;
             adapterBinding.EnableTrace = (System.Boolean)this["EnableTrace"];
             adapterBinding.ContentType = (System.String)this["ContentType"];
-            adapterBinding.Encoding = (System.String)this["Encoding"];
+            adapterBinding.Encoding = (EncodingEnum)this["Encoding"];
             adapterBinding.MessageId = (System.String)this["MessageId"];
             adapterBinding.Interval = (System.Int32)this["Interval"];
             adapterBinding.PoolingLot = (System.Int32)this["PoolingLot"];
@@ -220,7 +220,7 @@ namespace AMQPBizTalkAdapter
                     ConfigurationPropertyCollection configProperties = base.Properties;
                     configProperties.Add(new ConfigurationProperty("EnableTrace", typeof(System.Boolean), false, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("ContentType", typeof(System.String), "text/xml", null, null, ConfigurationPropertyOptions.None));
-                    configProperties.Add(new ConfigurationProperty("Encoding", typeof(System.String), "UTF8", null, null, ConfigurationPropertyOptions.None));
+                    configProperties.Add(new ConfigurationProperty("Encoding", typeof(EncodingEnum), EncodingEnum.UTF8, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("MessageId", typeof(System.String), "GenNewGuid", null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("Interval", typeof(System.Int32), (System.Int32)30, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("PoolingLot", typeof(System.Int32), (System.Int32)10, null, null, ConfigurationPropertyOptions.None));

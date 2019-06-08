@@ -12,6 +12,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Configuration;
 
 using Microsoft.ServiceModel.Channels.Common;
+using System.ComponentModel;
 #endregion
 
 namespace AMQPBizTalkAdapter
@@ -71,7 +72,7 @@ namespace AMQPBizTalkAdapter
         private string contentType;
 
 
-        private string encoding;
+        private EncodingEnum encoding;
 
 
         private string messageId;
@@ -181,8 +182,8 @@ namespace AMQPBizTalkAdapter
 
         [System.ComponentModel.Description("Message body and Header encoding")]
         [System.ComponentModel.Category("Message")]
-        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = "UTF8")]
-        public string Encoding
+        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = EncodingEnum.UTF8)]
+        public EncodingEnum Encoding
         {
             get
             {
@@ -297,5 +298,14 @@ namespace AMQPBizTalkAdapter
 
         #endregion Public Methods
 
+    }
+
+    [DefaultValue(EncodingEnum.UTF8)]
+    public enum EncodingEnum : int
+    {
+        ASCII = 20127,
+        UTF32 = 12000,
+        UTF16 = 1200,
+        UTF8 = 65001
     }
 }

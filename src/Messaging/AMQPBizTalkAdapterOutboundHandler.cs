@@ -16,6 +16,7 @@ namespace AMQPBizTalkAdapter
 {
     public class AMQPBizTalkAdapterOutboundHandler : AMQPBizTalkAdapterHandlerBase, IOutboundHandler
     {
+        private readonly string mTraceEventCode = "{0}/outbound/" + Guid.NewGuid().ToString();
         /// <summary>
         /// Initializes a new instance of the AMQPBizTalkAdapterOutboundHandler class
         /// </summary>
@@ -36,7 +37,25 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement Execute
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, this.Connection.ConnectionFactory.Adapter.EnableTrace))
+            {
+                // Trace input message  
+                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Wso2AdapterOutboundHandler.Execute");
+                // Timeout is not supported in this sample  
+                OperationMetadata om = this.MetadataLookup.GetOperationDefinitionFromInputMessageAction(message.Headers.Action, timeout);
+                if (om == null)
+                    throw new AdapterException("Invalid operation metadata for " + message.Headers.Action);
+                if (timeout.Equals(TimeSpan.Zero))
+                    throw new AdapterException("time out is zero");
+
+
+
+                AmqpPublisher MessagePublisher = new AmqpPublisher(this.Connection);
+                var Encoding = System.Text.Encoding.GetEncoding((int)this.Connection.ConnectionFactory.Adapter.Encoding);
+                MessagePublisher.Publish(message, methodTracer, timeout, Encoding);
+
+                return null;
+            }
         }
 
         #endregion IOutboundHandler Members

@@ -32,7 +32,7 @@ namespace AMQPBizTalkAdapter
         private string contentType;
 
 
-        private string encoding;
+        private EncodingEnum encoding;
 
 
         private string messageId;
@@ -108,8 +108,8 @@ namespace AMQPBizTalkAdapter
 
 
 
-        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = "UTF8")]
-        public string Encoding
+        [System.Configuration.ConfigurationProperty("encoding", DefaultValue = EncodingEnum.UTF8)]
+        public EncodingEnum Encoding
         {
             get
             {
