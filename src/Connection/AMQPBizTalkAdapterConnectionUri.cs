@@ -5,7 +5,7 @@
 
 #region Using Directives
 using System;
-
+using System.ComponentModel;
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
@@ -28,10 +28,10 @@ namespace AMQPBizTalkAdapter
         private string queueName = "testTopic";
 
 
-        private string queueType = "Topic";
+        private QueueTypeEnum queueType = QueueTypeEnum.Queue;
 
 
-        private string consumerIdentifier = "testtopic1";
+        private string subscriptionIdentifier = "clienttopic1";
 
         #endregion Custom Generated Fields
 
@@ -54,7 +54,7 @@ namespace AMQPBizTalkAdapter
         #endregion Constructors
 
         #region Custom Generated Properties
-
+        [Browsable(true), Category("Connect Descriptor"), Description("AMQP Message Brocker Server host Name")]
         public string HostName
         {
             get
@@ -68,7 +68,7 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [Browsable(true), Category("Connect Descriptor"), Description("AMQP Message Brocker Server Port")]
         public int Port
         {
             get
@@ -82,7 +82,7 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [Browsable(true), Category("Connect Descriptor"), Description("QueueName or TopicName")]
         public string QueueName
         {
             get
@@ -96,8 +96,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
-        public string QueueType
+        [Browsable(true), Category("QueueType"), Description("Queue or Topic ")]
+        public QueueTypeEnum QueueType
         {
             get
             {
@@ -110,16 +110,16 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
-        public string ConsumerIdentifier
+        [Browsable(true), Category("SubscriptionIdentifier"), Description("Topic subscription identifier")]
+        public string SubscriptionIdentifier
         {
             get
             {
-                return this.consumerIdentifier;
+                return this.subscriptionIdentifier;
             }
             set
             {
-                this.consumerIdentifier = value;
+                this.subscriptionIdentifier = value;
             }
         }
 
@@ -137,18 +137,105 @@ namespace AMQPBizTalkAdapter
                 //
                 //TODO: Return the composed uri in valid format
                 //
-                throw new NotImplementedException("The method or operation is not implemented.");
+                return this.Uri;
             }
             set
             {
                 //
                 //TODO: Parse the uri into its relevant parts to produce a valid Uri object. (For example scheme, host, query).
                 //
-                throw new NotImplementedException("The method or operation is not implemented.");
+                if (ValidateUri(value))
+                {
+                    this.Port = ((value.Port == -1) ? 1883 : value.Port);
+                    this.HostName = value.Host;
+                    string queueSegment = value.Segments[1].TrimEnd(new char[]
+                    {
+                    '/'
+                    });
+                    string queue = value.Segments[2].TrimEnd(new char[]
+                    {
+                    '/'
+                    });
+                    if (queueSegment.Equals("Queue", StringComparison.InvariantCultureIgnoreCase))
+                        //Queue
+                        QueueType = QueueTypeEnum.Queue;
+                    else if (queueSegment.Equals("Topic", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        //Topic 
+                        QueueType = QueueTypeEnum.Topic;
+                        this.subscriptionIdentifier = value.Query.Remove(0, 1);
+                    }
+                    this.QueueName = queue;
+                }
             }
         }
 
-        #endregion ConnectionUri Members
+        public override string SampleUriString {
+            get
+            {
+                return string.Format("{0}{1}{2}", "amqp://localhost:1111/Queue/Queue1", Environment.NewLine, "amqp://localhost:1111/Topic/topic1?subscriptionIdentifier1");
+            }
+        }
 
+
+        #endregion ConnectionUri Members
+        #region Prviate
+        bool ValidateUri(Uri uri)
+        {
+            if (uri == null)
+                throw new InvalidUriException("Uri is null or empty");
+            //scheme
+            if (!string.Equals(uri.Scheme, "AMQP", StringComparison.OrdinalIgnoreCase))
+                throw new InvalidUriException("Invalide scheme value");
+            if (string.IsNullOrEmpty(uri.Host))
+                throw new InvalidUriException("HostName is null or empty");
+
+            if (uri.Segments.Length == 3)
+            {
+                string queueSegment = uri.Segments[1].TrimEnd(new char[]
+                    {
+                    '/'
+                    });
+
+                if (queueSegment.Equals("Queue", StringComparison.OrdinalIgnoreCase))
+                {
+                    //Queue
+                    if (!string.IsNullOrEmpty(uri.Query))
+                    {
+                        throw new InvalidUriException("You can't have query value for Queue , it's allowed only for Topic");
+                    }
+                }
+                else if (queueSegment.Equals("Topic", StringComparison.OrdinalIgnoreCase))
+                {
+                    //Topic 
+                    if (string.IsNullOrEmpty(uri.Query) ||
+                        uri.Query.Contains(@"/") ||
+                        !uri.Query.StartsWith("?") ||
+                        uri.Query.Equals("?"))
+                    {
+                        throw new InvalidUriException("Invalid Topic subscription identifier");
+                    }
+                }
+                else
+                    throw new InvalidUriException(string.Format("You must have a Uri like {1}{2}", uri.ToString(), Environment.NewLine, this.SampleUriString));
+
+                string queue = uri.Segments[2].TrimEnd(new char[]
+                    {
+                    '/'
+                    });
+                if (string.IsNullOrEmpty(queue))
+                    throw new InvalidUriException(string.Format("You must have a Uri like {1}{2}", uri.ToString(), Environment.NewLine, this.SampleUriString));
+
+                return true;
+            }
+            else
+                throw new InvalidUriException(string.Format("You must have a Uri like {1}{2}", uri.ToString(), Environment.NewLine, this.SampleUriString));
+            #endregion
+        }
+    }
+    public enum QueueTypeEnum
+    {
+        Queue,
+        Topic
     }
 }

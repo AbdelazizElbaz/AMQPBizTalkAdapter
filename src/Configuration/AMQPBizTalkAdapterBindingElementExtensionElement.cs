@@ -49,6 +49,8 @@ namespace AMQPBizTalkAdapter
 
         #region Custom Generated Properties
 
+        [System.ComponentModel.Description("Enable all traces Levels.")]
+        [System.ComponentModel.Category("Diagnostics")]
         [System.Configuration.ConfigurationProperty("enableTrace", DefaultValue = false)]
         public bool EnableTrace
         {
@@ -63,7 +65,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [System.ComponentModel.Description("Content Type : text/Xml...")]
+        [System.ComponentModel.Category("Message")]
         [System.Configuration.ConfigurationProperty("contentType", DefaultValue = "text/xml")]
         public string ContentType
         {
@@ -78,7 +81,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [System.ComponentModel.Description("Message body and Header encoding")]
+        [System.ComponentModel.Category("Message")]
         [System.Configuration.ConfigurationProperty("encoding", DefaultValue = "UTF8")]
         public string Encoding
         {
@@ -93,7 +97,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [System.ComponentModel.Description("GenNewGUID : the SendPort will generate a new guid for every message, you can put a unique Id for all messages.")]
+        [System.ComponentModel.Category("Message")]
         [System.Configuration.ConfigurationProperty("messageId", DefaultValue = "GenNewGuid")]
         public string MessageId
         {
@@ -108,7 +113,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [System.ComponentModel.Description("Time interval in seconds between successive receive")]
+        [System.ComponentModel.Category("Pooling")]
         [System.Configuration.ConfigurationProperty("interval", DefaultValue = 30)]
         public int Interval
         {
@@ -123,7 +129,8 @@ namespace AMQPBizTalkAdapter
         }
 
 
-
+        [System.ComponentModel.Description("The number of messages to be retrieved for each polls.")]
+        [System.ComponentModel.Category("Pooling")]
         [System.Configuration.ConfigurationProperty("poolingLot", DefaultValue = 10)]
         public int PoolingLot
         {
@@ -139,12 +146,14 @@ namespace AMQPBizTalkAdapter
 
 
 
+        [System.ComponentModel.Description("Indicates the inbound operation to be performed : Pooling or Notification")]
+        [System.ComponentModel.Category("Configuration")]
         [System.Configuration.ConfigurationProperty("inboundOperationType", DefaultValue = "Notification")]
-        public string InboundOperationType
+        public InboundOperationType InboundOperationType
         {
             get
             {
-                return ((string)(base["InboundOperationType"]));
+                return ((InboundOperationType)(base["InboundOperationType"]));
             }
             set
             {

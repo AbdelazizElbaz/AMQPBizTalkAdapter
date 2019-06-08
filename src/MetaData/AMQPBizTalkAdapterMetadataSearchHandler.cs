@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.ServiceModel.Channels;
+using System.Linq;
 
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
@@ -41,7 +42,14 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Search for metadata on the target system.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            if (searchCriteria == null || string.IsNullOrEmpty(searchCriteria.Trim()))
+                return MetaDataHelper.GetMetadataRetrievalNodeList();
+
+            var list = from node in MetaDataHelper.GetMetadataRetrievalNodeList()
+                       where node.DisplayName.ToLowerInvariant().Contains(searchCriteria.ToLowerInvariant())
+                       select node;
+
+            return list.ToArray();
         }
 
         #endregion IMetadataSearchHandler Members

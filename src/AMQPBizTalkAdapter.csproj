@@ -73,6 +73,8 @@
     <Compile Include="Helpers\AMQPBizTalkAdapterTrace.cs" />
     <Compile Include="Connection\AMQPBizTalkAdapterConnectionUri.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="MetaData\AmqpMessageMetaData.cs" />
+    <Compile Include="MetaData\MetaDataHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -98,5 +100,13 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ExternalReferences\Microsoft.ServiceModel.Channels.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MetaData\AmqpMessage.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
 </Project>

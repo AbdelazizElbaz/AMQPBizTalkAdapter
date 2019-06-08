@@ -10,12 +10,12 @@ using System.Xml.Schema;
 
 namespace AMQPBizTalkAdapter
 {
-    class AmqpMessageMetaData : TypeMetadata
+    internal class AmqpMessageTypeMetadata : TypeMetadata
     {
         private const String MetaDataFileName = "AMQPBizTalkAdapter.AmqpMessage.xsd";
-        public AmqpMessageMetaData(string typeId, string typeName) : base(typeId, typeName)
+        public AmqpMessageTypeMetadata(string typeId, string typeName) : base(typeId, typeName)
         {
-            this.TypeNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE + "/PreDefinedTypes";
+            this.TypeNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE + "/Types";
             this.Description = " ";
             this.CanUseCommonCache = true;
             // if the nillable is not set to true, the generated proxy wraps the operation  

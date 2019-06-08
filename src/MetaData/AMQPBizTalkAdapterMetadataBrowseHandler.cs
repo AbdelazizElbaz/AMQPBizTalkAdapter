@@ -41,7 +41,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement the metadata browse on the target system.
             //
-            if (MetadataRetrievalNode.Root.NodeId.Equals(nodeId))
+            if (MetadataRetrievalNode.Root.NodeId.Equals(nodeId,StringComparison.InvariantCultureIgnoreCase))
             {
                 MetadataRetrievalNode node = new MetadataRetrievalNode(MetaDataHelper.rootNodeId);
                 node.DisplayName = MetaDataHelper.rootNodeId;
@@ -51,9 +51,7 @@ namespace AMQPBizTalkAdapter
                 return new MetadataRetrievalNode[] { node };
             }
             if (MetaDataHelper.rootNodeId.CompareTo(nodeId) == 0)
-            {
                 return MetaDataHelper.GetMetadataRetrievalNodeList();
-            }
             return null;
         }
 

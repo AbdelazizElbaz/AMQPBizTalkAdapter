@@ -68,7 +68,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement physical checking for the validity of the opened connection
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            return true;
 
         }
 
@@ -80,7 +80,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement physical opening of the connection
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+          
 
         }
 
@@ -92,7 +92,6 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement clear context to set the connection back to the pool.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
         }
 
         /// <summary>
@@ -134,7 +133,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement abort logic. DO NOT throw an exception from this method
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            
         }
 
 

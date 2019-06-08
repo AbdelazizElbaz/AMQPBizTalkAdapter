@@ -78,19 +78,16 @@ namespace AMQPBizTalkAdapter
                         om.OperationGroup = "AmqpInboundContract";
                         om.OperationNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE;
                         om.NeverExpires = true;
-                        ComplexQualifiedType cqtWso2Message = new ComplexQualifiedType("Types/AmqpMessageMetaData");
-                        //OperationParameter parmMessage = new OperationParameter("Wso2Message", OperationParameterDirection.Out, cqtWso2Message, false);
-                        // parmMessage.Description = "Message From WSO2";
-                        // om.Parameters.Add(parmMessage);
-                        //om.OperationResult = new OperationResult(cqtMessage, false);
-                        om.OperationResult = new OperationResult(cqtWso2Message, false);
+                        ComplexQualifiedType cqtAmqpMessage = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
+                        
+                        om.OperationResult = new OperationResult(cqtAmqpMessage, false);
 
                         // resolve extra typemetadata here  
                         extraTypeMetadataResolved = new TypeMetadataCollection();
 
                         // use a predefined schema to generate metadata for this type  
-                        AmqpMessageMetaData wso2MessageMetaData = new AmqpMessageMetaData("Types/AmqpMessageMetaData", "ReceiveMessage");
-                        extraTypeMetadataResolved.Add(wso2MessageMetaData);
+                        AmqpMessageTypeMetadata AmqpMessageMessageMetaData = new AmqpMessageTypeMetadata("Types/AmqpMessageTypeMetadata", "ReceiveMessage");
+                        extraTypeMetadataResolved.Add(AmqpMessageMessageMetaData);
 
                         return om;
                     }
@@ -102,20 +99,18 @@ namespace AMQPBizTalkAdapter
                         om.OperationGroup = "AmqpOutboundContract";
                         om.OperationNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE;
 
-                        ComplexQualifiedType cqtWso2MessageRequest = new ComplexQualifiedType("Types/AmqpMessageMetaData");
+                        ComplexQualifiedType cqtWso2MessageRequest = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
 
                         OperationParameter parmMessage = new OperationParameter("SendMessageRequest", OperationParameterDirection.In, cqtWso2MessageRequest, false);
                         om.Parameters.Add(parmMessage);
 
-                        ComplexQualifiedType cqtWso2MessageResponse = new ComplexQualifiedType("Types/AmqpMessageMetaData");
+                        ComplexQualifiedType cqtWso2MessageResponse = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
                         // resolve extra typemetadata here  
                         extraTypeMetadataResolved = new TypeMetadataCollection();
-                        AmqpMessageMetaData wso2MessageMetaDataRequest = new AmqpMessageMetaData("Types/Wso2MessageMetaData", "SendMessageRequest");
-                        AmqpMessageMetaData wso2MessageMetaDataRespense = new AmqpMessageMetaData("Types/Wso2MessageMetaData", "SendMessageResponse");
-                        extraTypeMetadataResolved.Add(wso2MessageMetaDataRequest);
-                        extraTypeMetadataResolved.Add(wso2MessageMetaDataRespense);
+                        AmqpMessageTypeMetadata AmqpMessageMetaDataRequest = new AmqpMessageTypeMetadata("Types/AmqpMessageTypeMetadata", "SendMessageRequest");
+                        extraTypeMetadataResolved.Add(AmqpMessageMetaDataRequest);
 
-                        om.OperationResult = new OperationResult(cqtWso2MessageResponse, false);
+                        om.OperationResult = OperationResult.Empty;
                         return om;
                     }
 
