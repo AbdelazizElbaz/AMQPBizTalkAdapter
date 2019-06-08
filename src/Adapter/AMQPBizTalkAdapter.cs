@@ -14,6 +14,7 @@ using Microsoft.ServiceModel.Channels.Common;
 
 namespace AMQPBizTalkAdapter
 {
+   
     public class AMQPBizTalkAdapter : Adapter
     {
         // Scheme associated with the adapter

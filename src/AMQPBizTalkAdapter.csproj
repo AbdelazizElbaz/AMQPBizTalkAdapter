@@ -64,7 +64,9 @@
     <Compile Include="Connection\AMQPBizTalkAdapterConnectionFactory.cs" />
     <Compile Include="Connection\AMQPBizTalkAdapterConnection.cs" />
     <Compile Include="Adapter\AMQPBizTalkAdapterHandlerBase.cs" />
+    <Compile Include="Diagnostic\MethodTracer.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
+    <Compile Include="Messaging\AmqpPublisher.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataSearchHandler.cs" />
@@ -77,9 +79,15 @@
     <Compile Include="MetaData\MetaDataHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ExternalReferences\Microsoft.ServiceModel.Channels.dll</HintPath>
+    </Reference>
+    <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -108,5 +116,6 @@
     <None Include="MetaData\AmqpMessage.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

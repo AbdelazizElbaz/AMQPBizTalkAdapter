@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Microsoft.ServiceModel.Channels.Common;
+
 #endregion
 
 namespace AMQPBizTalkAdapter
@@ -20,16 +21,21 @@ namespace AMQPBizTalkAdapter
 
         private AMQPBizTalkAdapterConnectionFactory connectionFactory;
         private string connectionId;
-
+        private string userName;
+        private string passWord;
+        private  AMQPBizTalkAdapterConnectionUri connectionUri;
         #endregion Private Fields
 
         /// <summary>
         /// Initializes a new instance of the AMQPBizTalkAdapterConnection class with the AMQPBizTalkAdapterConnectionFactory
         /// </summary>
-        public AMQPBizTalkAdapterConnection(AMQPBizTalkAdapterConnectionFactory connectionFactory)
+        public AMQPBizTalkAdapterConnection(AMQPBizTalkAdapterConnectionFactory connectionFactory, AMQPBizTalkAdapterConnectionUri connectionUri, string user, string pass)
         {
             this.connectionFactory = connectionFactory;
             this.connectionId = Guid.NewGuid().ToString();
+            this.userName = user;
+            this.passWord = pass;
+            this.connectionUri = connectionUri;
         }
 
         #region Public Properties
@@ -80,7 +86,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement physical opening of the connection
             //
-          
+
 
         }
 
@@ -133,9 +139,8 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement abort logic. DO NOT throw an exception from this method
             //
-            
-        }
 
+        }
 
         /// <summary>
         /// Gets the Id of the Connection
@@ -148,6 +153,19 @@ namespace AMQPBizTalkAdapter
             }
         }
 
+
+        public RabbitMQ.Client.ConnectionFactory CreateRabbitMQConnectionFactory(TimeSpan openTimeOut)
+        {
+            RabbitMQ.Client.ConnectionFactory factory = new RabbitMQ.Client.ConnectionFactory();
+            factory.VirtualHost = "/carbon";
+            factory.UserName = this.userName;
+            factory.Password = this.passWord;
+            factory.HostName = this.connectionUri.HostName;
+            factory.Port = this.connectionUri.Port;
+            factory.Protocol = RabbitMQ.Client.Protocols.AMQP_0_9_1; ;
+            factory.RequestedConnectionTimeout = (int)openTimeOut.TotalMilliseconds;
+            return factory;
+        }
         #endregion IConnection Members
     }
 }

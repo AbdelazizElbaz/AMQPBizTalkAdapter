@@ -11,6 +11,7 @@ using System.IdentityModel.Selectors;
 using System.ServiceModel.Description;
 
 using Microsoft.ServiceModel.Channels.Common;
+using System.ServiceModel.Security;
 #endregion
 
 namespace AMQPBizTalkAdapter
@@ -23,7 +24,8 @@ namespace AMQPBizTalkAdapter
         private ClientCredentials clientCredentials;
         // Stores the adapter class
         private AMQPBizTalkAdapter adapter;
-
+        // Stores the adapter connectionUri
+        private AMQPBizTalkAdapterConnectionUri connectionUri;
         #endregion Private Fields
 
         /// <summary>
@@ -35,6 +37,20 @@ namespace AMQPBizTalkAdapter
         {
             this.clientCredentials = clientCredentials;
             this.adapter = adapter;
+            this.connectionUri = new AMQPBizTalkAdapterConnectionUri(connectionUri.Uri);
+            // it support SSO 
+            if (clientCredentials != null)
+            {
+                UserNamePasswordClientCredential userName = clientCredentials.UserName;
+                if (string.IsNullOrEmpty(userName.UserName))
+                {
+                    throw new CredentialsException("Username is expected.");
+                }
+            }
+            else
+            {
+                throw new CredentialsException("ClientCredentials is not specified.");
+            }
         }
 
         #region Public Properties
@@ -59,7 +75,12 @@ namespace AMQPBizTalkAdapter
         /// </summary>
         public IConnection CreateConnection()
         {
-            return new AMQPBizTalkAdapterConnection(this);
+            return new AMQPBizTalkAdapterConnection(
+                                                    this,
+                                                    connectionUri,
+                                                    clientCredentials.UserName.UserName,
+                                                    clientCredentials.UserName.Password
+                                                    );
         }
 
         #endregion Public Methods
