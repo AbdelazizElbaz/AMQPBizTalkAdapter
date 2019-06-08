@@ -64,8 +64,10 @@
     <Compile Include="Connection\AMQPBizTalkAdapterConnectionFactory.cs" />
     <Compile Include="Connection\AMQPBizTalkAdapterConnection.cs" />
     <Compile Include="Adapter\AMQPBizTalkAdapterHandlerBase.cs" />
-    <Compile Include="Diagnostic\MethodTracer.cs" />
+    <Compile Include="Diagnostics\MethodTracer.cs" />
+    <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
+    <Compile Include="Messaging\AmqpMessage.cs" />
     <Compile Include="Messaging\AmqpPublisher.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />

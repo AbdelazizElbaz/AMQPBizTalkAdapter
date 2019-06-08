@@ -152,7 +152,16 @@ namespace AMQPBizTalkAdapter
                 return connectionId;
             }
         }
-
+        /// <summary>
+        /// Gets the Id of the Connection
+        /// </summary>
+        public AMQPBizTalkAdapterConnectionUri ConnectionUri
+        {
+            get
+            {
+                return connectionUri;
+            }
+        }
 
         public RabbitMQ.Client.ConnectionFactory CreateRabbitMQConnectionFactory(TimeSpan openTimeOut)
         {

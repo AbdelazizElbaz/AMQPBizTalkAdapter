@@ -79,8 +79,7 @@ namespace AMQPBizTalkAdapter
                                                     this,
                                                     connectionUri,
                                                     clientCredentials.UserName.UserName,
-                                                    clientCredentials.UserName.Password
-                                                    );
+                                                    clientCredentials.UserName.Password);
         }
 
         #endregion Public Methods
