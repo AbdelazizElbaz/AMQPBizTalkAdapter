@@ -15,9 +15,11 @@ namespace AMQPBizTalkAdapter
         #region Private
         const string exchangeQueue = "amq.direct";
         const string exchangeTopic = "amq.topic";
-        object ObjectLocker;
-        bool closed = false;
-        RabbitMQ.Client.ConnectionFactory connectionFactory;
+        readonly object ObjectLocker;
+        readonly Uri connectionUri;
+        internal bool closed = false;
+       readonly AMQPBizTalkAdapterConnection connectionFactory;
+       // RabbitMQ.Client.ConnectionFactory connectionFactory;
         Queue<BasicDeliverEventArgs> inboundQueue;
         QueueTypeEnum queueType;
         MethodTracer tracer;
@@ -50,9 +52,9 @@ namespace AMQPBizTalkAdapter
 
                 try
                 {
-                    methodTracer.TraceData(TraceEventType.Verbose, "StartListener");
+                    methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Start listening uri= {0}", this.connectionUri));
 
-                    this.RabbitMQConnection = connectionFactory.CreateConnection();
+                    this.RabbitMQConnection = connectionFactory.CreateRabbitMQConnectionFactory(timeout).CreateConnection();
                     this.RabbitMQModel = RabbitMQConnection.CreateModel();
 
                     if (queueType==QueueTypeEnum.Topic)
@@ -98,6 +100,7 @@ namespace AMQPBizTalkAdapter
         {
             try
             {
+                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Stop listening uri= {0}", this.connectionUri));
                 this.closed = true;
 
                 lock (ObjectLocker)
@@ -122,14 +125,18 @@ namespace AMQPBizTalkAdapter
             }
 
         }
-        public bool CheckAvailablesMessages()
+        public  bool IsAvailablesMessages
         {
-            lock (ObjectLocker)
-            {
-                return inboundQueue.Count > 0;
+            get{
+
+                lock (ObjectLocker)
+                {
+                    return inboundQueue.Count > 0;
+                }
             }
+            
         }
-        public List<BasicDeliverEventArgs> GetMessages(uint lot)
+        public List<BasicDeliverEventArgs> DequeueMessages(uint lot)
         {
             List<BasicDeliverEventArgs> msgs = new List<BasicDeliverEventArgs>();
             lock (ObjectLocker)
@@ -142,23 +149,6 @@ namespace AMQPBizTalkAdapter
             }
             return msgs;
         }
-
-        #endregion
-        #region Constructor
-        public AmqpReceiverBase(RabbitMQ.Client.ConnectionFactory rabbitMQconnectionFactory,
-            QueueTypeEnum queueType, MethodTracer methodTracer,string queue,string topicRoutingKey,string subscriptionId)
-        {
-            this.connectionFactory = rabbitMQconnectionFactory;
-            this.tracer = methodTracer;
-            this.queueType = queueType;
-            this.ObjectLocker = new object();
-            this.routingKey = topicRoutingKey;
-            this.queueName = queue;
-            this.inboundQueue = new Queue<BasicDeliverEventArgs>();
-            this.subscriptionIdentifier = subscriptionId;
-        }
-
-
         public void AckDelivery(ulong DeliveryTag)
         {
             RabbitMQModel.BasicAck(DeliveryTag, false);
@@ -173,7 +163,21 @@ namespace AMQPBizTalkAdapter
             RabbitMQModel.BasicNack(DeliveryTag, false, true);
         }
 
-
+        #endregion
+        #region Constructor
+        public AmqpReceiverBase(AMQPBizTalkAdapterConnection connectionFactory,
+            QueueTypeEnum queueType, MethodTracer methodTracer,string queue,string topicRoutingKey,string subscriptionId)
+        {
+            this.connectionFactory = connectionFactory;
+            this.connectionUri = connectionFactory.ConnectionUri.Uri;
+            this.tracer = methodTracer;
+            this.queueType = queueType;
+            this.ObjectLocker = new object();
+            this.routingKey = topicRoutingKey;
+            this.queueName = queue; 
+            this.inboundQueue = new Queue<BasicDeliverEventArgs>();
+            this.subscriptionIdentifier = subscriptionId;
+        }
         #endregion
     }
 }

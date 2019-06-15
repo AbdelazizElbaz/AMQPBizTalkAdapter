@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -93,6 +94,77 @@ namespace AMQPBizTalkAdapter.Helpers
                 body = body.Remove(body.Length - "]]>".Length, "]]>".Length);
             }
             return body;
+        }
+
+        public static Message CreateWcfMessage(ReceiveMessage message,Uri uri)
+        {
+             System.Xml.XmlReader reader = System.Xml.XmlReader.Create(new StringReader(message.ToString()));
+            // create WCF message  
+            Message chMessage = Message.CreateMessage(MessageVersion.Default
+                        , MetaDataHelper.ReceiveOperationNodeId
+                        , reader);
+
+            chMessage.Headers.To = uri;
+            return chMessage;
+        }
+
+        public static ReceiveMessage GetReceiveMessage(RabbitMQ.Client.Events.BasicDeliverEventArgs e, MethodTracer methodTracer, Encoding messageEncoding,string messageId)
+        {
+
+            if (e == null || e.Body == null)
+            {
+                return null;
+            }
+            ReceiveMessage message = new ReceiveMessage();
+            message.Body = messageEncoding.GetString(e.Body);
+            message.DeliveryTag = e.DeliveryTag;
+            message.ConsumerTag = e.ConsumerTag;
+            message.Exchange = e.Exchange;
+            message.Redelivered = e.Redelivered;
+            message.RoutingKey = e.RoutingKey;
+            if (e.BasicProperties != null)
+            {
+                message.BasicProperties = new BasicProperties();
+                message.BasicProperties.AppId = e.BasicProperties.AppId;
+                message.BasicProperties.ClusterId = e.BasicProperties.ClusterId;
+                message.BasicProperties.ContentEncoding = e.BasicProperties.ContentEncoding;
+                message.BasicProperties.ContentType = e.BasicProperties.ContentType;
+                message.BasicProperties.CorrelationId = e.BasicProperties.CorrelationId;
+                message.BasicProperties.DeliveryMode = e.BasicProperties.DeliveryMode;
+                message.BasicProperties.Expiration = e.BasicProperties.Expiration;
+                message.BasicProperties.MessageId = e.BasicProperties.MessageId;
+                message.BasicProperties.Priority = e.BasicProperties.Priority;
+                message.BasicProperties.ReplyTo = e.BasicProperties.ReplyTo;
+                message.BasicProperties.Timestamp = e.BasicProperties.Timestamp.UnixTime;
+                message.BasicProperties.Type = e.BasicProperties.Type;
+                message.BasicProperties.UserId = e.BasicProperties.UserId;
+                message.BasicProperties.ProtocolClassId = e.BasicProperties.ProtocolClassId;
+                message.BasicProperties.ProtocolClassName = e.BasicProperties.ProtocolClassName;
+                if (e.BasicProperties.Headers != null && e.BasicProperties.Headers.Count > 0)
+                {
+                    List<BasicPropertiesItem> items = new List<BasicPropertiesItem>();
+                    foreach (string key in e.BasicProperties.Headers.Keys)
+                    {
+                        object value = e.BasicProperties.Headers[key];
+                        if (value != null)
+                        {
+                            BasicPropertiesItem item = new BasicPropertiesItem();
+                            item.Key = key;
+                                item.Value = messageEncoding.GetString((byte[])value);
+                                items.Add(item);
+                        }
+                    }
+                    message.BasicProperties.Headers = items.ToArray();
+                }
+            }
+
+            Guid Id = Guid.NewGuid();
+            if (!"GenNewGUID".Equals(messageId) &&
+                Guid.TryParse(messageId, out Id))
+            {
+                message.BasicProperties.MessageId = Id.ToString();
+            }
+            return message;
         }
     }
 }

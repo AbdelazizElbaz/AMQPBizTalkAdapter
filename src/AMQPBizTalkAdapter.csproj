@@ -66,11 +66,13 @@
     <Compile Include="Adapter\AMQPBizTalkAdapterHandlerBase.cs" />
     <Compile Include="Diagnostics\MethodTracer.cs" />
     <Compile Include="Helpers\Helper.cs" />
+    <Compile Include="Helpers\TimeOutHelper.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
     <Compile Include="Messaging\AmqpMessage.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpNotification.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpPublisher.cs" />
-    <Compile Include="Messaging\RabbitMq\RabbitMQConsumerBase.cs" />
+    <Compile Include="Messaging\RabbitMq\IReceiver.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpReceiverBase.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataSearchHandler.cs" />

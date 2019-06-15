@@ -113,7 +113,7 @@ namespace AMQPBizTalkAdapter
             }
             if (typeof(IInboundHandler).IsAssignableFrom(typeof(TConnectionHandler)))
             {
-                return new AMQPBizTalkAdapterInboundHandler(this, metadataLookup) as TConnectionHandler;
+                return new AMQPBizTalkAdapterInboundHandler(this, metadataLookup, connectionFactory.Adapter) as TConnectionHandler;
             }
             if (typeof(IMetadataResolverHandler).IsAssignableFrom(typeof(TConnectionHandler)))
             {

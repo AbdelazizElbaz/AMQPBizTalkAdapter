@@ -151,7 +151,7 @@ public partial class BasicProperties {
     
     private bool deliveryModeFieldSpecified;
     
-    private sbyte priorityField;
+    private byte priorityField;
     
     private bool priorityFieldSpecified;
     
@@ -225,7 +225,7 @@ public partial class BasicProperties {
     }
     
     /// <remarks/>
-    public sbyte Priority {
+    public byte Priority {
         get {
             return this.priorityField;
         }
