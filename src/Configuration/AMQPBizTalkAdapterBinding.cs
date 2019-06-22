@@ -53,7 +53,13 @@ namespace AMQPBizTalkAdapter
                 element.ApplyConfiguration(this);
             }
             */
-            throw new NotImplementedException("The method or operation is not implemented.");
+            BindingsSection bindingsSection = (BindingsSection)System.Configuration.ConfigurationManager.GetSection("system.serviceModel/bindings");
+            AMQPBizTalkAdapterBindingCollectionElement bindingCollectionElement = (AMQPBizTalkAdapterBindingCollectionElement)bindingsSection["Wso2AdapterBinding"];
+            AMQPBizTalkAdapterBindingElement element = bindingCollectionElement.Bindings[configurationName];
+            if (element != null)
+            {
+                element.ApplyConfiguration(this);
+            }
         }
 
 

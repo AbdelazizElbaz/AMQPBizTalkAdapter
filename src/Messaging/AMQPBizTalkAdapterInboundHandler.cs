@@ -32,12 +32,13 @@ namespace AMQPBizTalkAdapter
                 //synclocker = new Object();
                 if (adapter.InboundOperationType == InboundOperationType.Notification)
                 {
-                    this.msgReceiver = new AmqpNotification(connection,connection.ConnectionUri.QueueType,connection.ConnectionUri.QueueName,
+                    this.msgReceiver = new AmqpNotificationReceiver(connection,connection.ConnectionUri.QueueType,connection.ConnectionUri.QueueName,
                         adapter.RoutingKey,connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding),adapter.MessageId);
                 }
                 else
                 {
-                    //Pooling int the second version
+                    //TODO
+                    //Pooling :  the second version
                 }
             }
 
@@ -51,7 +52,7 @@ namespace AMQPBizTalkAdapter
         public void StartListener(string[] actions, TimeSpan timeout)
         {
             //
-            //TODO: Implement start adapter listener logic.
+            // Implement start adapter listener logic.
             //
             using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, enableTrace))
             {
@@ -65,8 +66,8 @@ namespace AMQPBizTalkAdapter
                 }
                 catch (Exception ex)
                 {
-                    methodTracer.TraceError(string.Format("Error in IReceiver.StartListener : [{0}]" , ex.ToString()));
-                    throw new AdapterException("Error in IReceiver.StartListener", ex);
+                    methodTracer.TraceError(string.Format("Error in AMQPBizTalkAdapterInboundHandler.StartListener : [{0}]", ex.ToString()));
+                    throw new AdapterException("Error in AMQPBizTalkAdapterInboundHandler.StartListener", ex);
                 }
             }
         }
@@ -77,7 +78,7 @@ namespace AMQPBizTalkAdapter
         public void StopListener(TimeSpan timeout)
         {
             //
-            //TODO: Implement stop adapter listener logic.
+            // Implement stop adapter listener logic.
             //
             using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, enableTrace))
             {
@@ -91,8 +92,8 @@ namespace AMQPBizTalkAdapter
                 }
                 catch (Exception ex)
                 {
-                    methodTracer.TraceError(string.Format("Error in IReceiver.StopListener : [{0}]", ex.ToString()));
-                    throw new AdapterException("Error in IReceiver.StopListener", ex);
+                    methodTracer.TraceError(string.Format("Error in AMQPBizTalkAdapterInboundHandler.StopListener : [{0}]", ex.ToString()));
+                    throw new AdapterException("Error in AMQPBizTalkAdapterInboundHandler.StopListener", ex);
                 }
             }
         }
@@ -102,11 +103,21 @@ namespace AMQPBizTalkAdapter
         /// </summary>
         public bool TryReceive(TimeSpan timeout, out System.ServiceModel.Channels.Message message, out IInboundReply reply)
         {
-            reply = new AMQPBizTalkAdapterInboundReply();
-            //
-            //TODO: Implement Try Receive logic.
-            //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, enableTrace))
+            {
+                try
+                {
+                    methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Call TryReceive [{0}] TimeOut=[{1}] ", mTraceEventCode, timeout.ToString()));
+                    message = null;
+                    reply = new AMQPBizTalkAdapterInboundReply();
+                    return msgReceiver.TryReceive(timeout, methodTracer, out message);
+                }
+                catch (Exception ex)
+                {
+                    methodTracer.TraceError("Error in AMQPBizTalkAdapterInboundHandler.TryReceive : " + ex.ToString());
+                    throw new AdapterException("Error in AMQPBizTalkAdapterInboundHandler.TryReceive", ex);
+                }
+            }
         }
 
         /// <summary>
@@ -117,7 +128,21 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement Wait for message logic.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, enableTrace))
+            {
+                try
+                {
+                    methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Call WaitForMessage [{0}] ", mTraceEventCode));
+
+                    return msgReceiver.WaitForMessage(timeout, methodTracer);
+
+                }
+                catch (Exception ex)
+                {
+                    methodTracer.TraceError(string.Format("Error in AMQPBizTalkAdapterInboundHandler.WaitForMessage : [{0}]" , ex.ToString()));
+                    throw new AdapterException("Error in AMQPBizTalkAdapterInboundHandler.WaitForMessage", ex);
+                }
+            }
         }
 
         #endregion IInboundHandler Members

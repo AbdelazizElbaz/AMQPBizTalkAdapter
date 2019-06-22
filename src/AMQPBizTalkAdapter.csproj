@@ -69,7 +69,8 @@
     <Compile Include="Helpers\TimeOutHelper.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
     <Compile Include="Messaging\AmqpMessage.cs" />
-    <Compile Include="Messaging\RabbitMq\AmqpNotification.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpNotificationReceiver.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpPollingReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpPublisher.cs" />
     <Compile Include="Messaging\RabbitMq\IReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpReceiverBase.cs" />

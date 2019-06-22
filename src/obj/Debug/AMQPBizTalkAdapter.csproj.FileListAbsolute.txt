@@ -9,3 +9,4 @@ C:\Users\abdel\OneDrive\Documents\GitHub\AMQPBizTalkAdapter\src\bin\Debug\Rabbit
 C:\Users\abdel\OneDrive\Documents\GitHub\AMQPBizTalkAdapter\src\obj\Debug\AMQPBizTalkAdapter.csproj.CopyComplete
 C:\Users\abdel\OneDrive\Documents\GitHub\AMQPBizTalkAdapter\src\obj\Debug\AMQPBizTalkAdapter.AMQPBizTalkAdapter.dll
 C:\Users\abdel\OneDrive\Documents\GitHub\AMQPBizTalkAdapter\src\obj\Debug\AMQPBizTalkAdapter.AMQPBizTalkAdapter.pdb
+C:\Users\abdel\OneDrive\Documents\GitHub\AMQPBizTalkAdapter\src\obj\Debug\AMQPBizTalkAdapter.csprojAssemblyReference.cache
