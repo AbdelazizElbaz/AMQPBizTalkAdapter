@@ -63,7 +63,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement physical closing of the connection
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            
         }
 
         /// <summary>

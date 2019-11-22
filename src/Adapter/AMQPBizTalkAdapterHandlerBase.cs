@@ -64,7 +64,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement Dispose. Override this method in respective Handler classes
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+            
         }
     }
 }

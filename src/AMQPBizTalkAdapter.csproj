@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AMQPBizTalkAdapter</RootNamespace>
-    <AssemblyName>AMQPBizTalkAdapter.AMQPBizTalkAdapter</AssemblyName>
+    <AssemblyName>AMQPBizTalkAdapter</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -30,6 +30,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +48,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -74,6 +81,7 @@
     <Compile Include="Messaging\RabbitMq\AmqpPublisher.cs" />
     <Compile Include="Messaging\RabbitMq\IReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpReceiverBase.cs" />
+    <Compile Include="Messaging\ReceiveMessageBody.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataResolverHandler.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataSearchHandler.cs" />
@@ -87,14 +95,20 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Microsoft.Diagnostics.Tracing.EventSource.Redist.1.1.28\lib\net46\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalReferences\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ServiceModel.Channels, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ExternalReferences\Microsoft.ServiceModel.Channels.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.XLANGs.BaseTypes, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalReferences\Microsoft.XLANGs.BaseTypes.dll</HintPath>
+    </Reference>
     <Reference Include="RabbitMQ.Client, Version=5.0.0.0, Culture=neutral, PublicKeyToken=89e7d7c5feba84ce, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RabbitMQ.Client.5.1.0\lib\net451\RabbitMQ.Client.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalReferences\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
@@ -117,9 +131,12 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ExternalReferences\Microsoft.Diagnostics.Tracing.EventSource.dll" />
     <Content Include="ExternalReferences\Microsoft.ServiceModel.Channels.dll" />
+    <Content Include="ExternalReferences\Microsoft.XLANGs.BaseTypes.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Key.snk" />
     <None Include="MetaData\AmqpMessage.xsd">
       <SubType>Designer</SubType>
     </None>

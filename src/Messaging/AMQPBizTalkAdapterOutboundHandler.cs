@@ -40,7 +40,7 @@ namespace AMQPBizTalkAdapter
             using (MethodTracer methodTracer = new MethodTracer(this.mTraceEventCode, AMQPBizTalkAdapterTracer.Trace, this.Connection.ConnectionFactory.Adapter.EnableTrace))
             {
                 // Trace input message  
-                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Wso2AdapterOutboundHandler.Execute");
+                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "AmqpAdapterOutboundHandler.Execute");
                 // Timeout is not supported in this sample  
                 OperationMetadata om = this.MetadataLookup.GetOperationDefinitionFromInputMessageAction(message.Headers.Action, timeout);
                 if (om == null)

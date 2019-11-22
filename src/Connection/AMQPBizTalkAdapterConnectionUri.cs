@@ -33,6 +33,8 @@ namespace AMQPBizTalkAdapter
 
         private string subscriptionIdentifier = "clienttopic1";
 
+        private Uri _uri;
+
         #endregion Custom Generated Fields
 
         #region Constructors
@@ -48,7 +50,7 @@ namespace AMQPBizTalkAdapter
         public AMQPBizTalkAdapterConnectionUri(Uri uri)
             : base()
         {
-
+            this.Uri = uri;
         }
 
         #endregion Constructors
@@ -137,7 +139,7 @@ namespace AMQPBizTalkAdapter
                 //
                 //TODO: Return the composed uri in valid format
                 //
-                return this.Uri;
+                return this.GetUri();
             }
             set
             {
@@ -166,6 +168,7 @@ namespace AMQPBizTalkAdapter
                         this.subscriptionIdentifier = value.Query.Remove(0, 1);
                     }
                     this.QueueName = queue;
+                    _uri = value;
                 }
             }
         }
@@ -231,6 +234,30 @@ namespace AMQPBizTalkAdapter
             else
                 throw new InvalidUriException(string.Format("You must have a Uri like {1}{2}", uri.ToString(), Environment.NewLine, this.SampleUriString));
             #endregion
+        }
+        public Uri GetUri()
+        {
+            string uritxt = string.Empty;
+            if (!string.IsNullOrEmpty(this.QueueName))
+            {
+                uritxt = string.Concat(new object[]
+                {
+                    "amqp://",
+                        this.HostName,
+                        ":",
+                        this.port,
+                        "/",
+                        QueueType==QueueTypeEnum.Queue ? "Queue" :"Topic",
+                        "/",
+                        Uri.EscapeDataString(this.QueueName),
+                        QueueType==QueueTypeEnum.Queue ? "" : string.Format("?{0}",this.SubscriptionIdentifier),
+                    });
+            }
+            else
+            {
+                throw new InvalidUriException("QueueName is Empty");
+            }
+            return new Uri(uritxt);
         }
     }
     public enum QueueTypeEnum

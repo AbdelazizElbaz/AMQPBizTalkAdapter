@@ -136,12 +136,12 @@ namespace AMQPBizTalkAdapter
             }
             
         }
-        public List<BasicDeliverEventArgs> DequeueMessages(uint lot)
+        public List<BasicDeliverEventArgs> DequeueMessages(int lot)
         {
             List<BasicDeliverEventArgs> msgs = new List<BasicDeliverEventArgs>();
             lock (ObjectLocker)
             {
-                uint count = inboundQueue.Count >= lot ? lot : (uint)inboundQueue.Count;
+                int count = inboundQueue.Count >= lot ? lot : inboundQueue.Count;
                 for (int i = 0; i < count; i++)
                 {
                     msgs.Add(inboundQueue.Dequeue());

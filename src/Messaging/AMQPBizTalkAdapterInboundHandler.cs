@@ -37,8 +37,8 @@ namespace AMQPBizTalkAdapter
                 }
                 else
                 {
-                    //TODO
-                    //Pooling :  the second version
+                    this.msgReceiver = new AmqpPollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                        adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.PoolingLot, adapter.Interval);
                 }
             }
 
@@ -169,7 +169,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement abort logic.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+           
         }
 
         /// <summary>
@@ -181,7 +181,7 @@ namespace AMQPBizTalkAdapter
             //
             //TODO: Implement reply logic.
             //
-            throw new NotImplementedException("The method or operation is not implemented.");
+           
 
         }
 

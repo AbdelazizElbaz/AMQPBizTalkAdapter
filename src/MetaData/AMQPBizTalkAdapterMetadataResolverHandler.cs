@@ -99,12 +99,12 @@ namespace AMQPBizTalkAdapter
                         om.OperationGroup = "AmqpOutboundContract";
                         om.OperationNamespace = AMQPBizTalkAdapter.SERVICENAMESPACE;
 
-                        ComplexQualifiedType cqtWso2MessageRequest = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
+                        ComplexQualifiedType cqtAmqpMessageRequest = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
 
-                        OperationParameter parmMessage = new OperationParameter("SendMessageRequest", OperationParameterDirection.In, cqtWso2MessageRequest, false);
+                        OperationParameter parmMessage = new OperationParameter("SendMessageRequest", OperationParameterDirection.In, cqtAmqpMessageRequest, false);
                         om.Parameters.Add(parmMessage);
 
-                        ComplexQualifiedType cqtWso2MessageResponse = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
+                        ComplexQualifiedType cqtAmqpMessageResponse = new ComplexQualifiedType("Types/AmqpMessageTypeMetadata");
                         // resolve extra typemetadata here  
                         extraTypeMetadataResolved = new TypeMetadataCollection();
                         AmqpMessageTypeMetadata AmqpMessageMetaDataRequest = new AmqpMessageTypeMetadata("Types/AmqpMessageTypeMetadata", "SendMessageRequest");

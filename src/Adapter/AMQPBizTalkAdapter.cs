@@ -222,7 +222,11 @@ namespace AMQPBizTalkAdapter
         /// </summary>
         protected override ConnectionUri BuildConnectionUri(Uri uri)
         {
-            return new AMQPBizTalkAdapterConnectionUri(uri);
+            using (MethodTracer methodTracer = new MethodTracer("AMQPBizTalkAdapter/{0}", AMQPBizTalkAdapterTracer.Trace,true))
+            {
+                methodTracer.TraceData(System.Diagnostics.TraceEventType.Information, "BuildConnectionUri : "+uri.ToString());
+                return new AMQPBizTalkAdapterConnectionUri(uri);
+            }
         }
 
         /// <summary>

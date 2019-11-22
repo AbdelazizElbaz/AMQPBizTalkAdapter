@@ -54,7 +54,7 @@ namespace AMQPBizTalkAdapter
             }
             */
             BindingsSection bindingsSection = (BindingsSection)System.Configuration.ConfigurationManager.GetSection("system.serviceModel/bindings");
-            AMQPBizTalkAdapterBindingCollectionElement bindingCollectionElement = (AMQPBizTalkAdapterBindingCollectionElement)bindingsSection["Wso2AdapterBinding"];
+            AMQPBizTalkAdapterBindingCollectionElement bindingCollectionElement = (AMQPBizTalkAdapterBindingCollectionElement)bindingsSection["AmqpAdapterBinding"];
             AMQPBizTalkAdapterBindingElement element = bindingCollectionElement.Bindings[configurationName];
             if (element != null)
             {

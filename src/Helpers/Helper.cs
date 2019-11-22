@@ -96,9 +96,9 @@ namespace AMQPBizTalkAdapter.Helpers
             return body;
         }
 
-        public static Message CreateWcfMessage(ReceiveMessage message,Uri uri)
+        public static Message CreateWcfMessage(ReceiveMessage message, Uri uri)
         {
-             System.Xml.XmlReader reader = System.Xml.XmlReader.Create(new StringReader(message.ToString()));
+            System.Xml.XmlReader reader = System.Xml.XmlReader.Create(new StringReader(SerializeToString<ReceiveMessage>(message)));
             // create WCF message  
             Message chMessage = Message.CreateMessage(MessageVersion.Default
                         , MetaDataHelper.ReceiveOperationNodeId
@@ -107,8 +107,22 @@ namespace AMQPBizTalkAdapter.Helpers
             chMessage.Headers.To = uri;
             return chMessage;
         }
+        public static Message CreateWcfMessage(List<ReceiveMessage> messages, Uri uri)
+        {
+            ReceiveMessageBody bodyWriter = new ReceiveMessageBody(messages);
 
-        public static ReceiveMessage GetReceiveMessage(RabbitMQ.Client.Events.BasicDeliverEventArgs e, MethodTracer methodTracer, Encoding messageEncoding,string messageId)
+          
+            // create WCF message  
+            Message chMessage = Message.CreateMessage(MessageVersion.Default
+                        , MetaDataHelper.ReceiveOperationNodeId
+                        , bodyWriter);
+
+            chMessage.Headers.To = uri;
+            // create WCF message  
+            return chMessage;
+        }
+
+        public static ReceiveMessage GetReceiveMessage(RabbitMQ.Client.Events.BasicDeliverEventArgs e, MethodTracer methodTracer, Encoding messageEncoding, string messageId)
         {
 
             if (e == null || e.Body == null)
@@ -150,21 +164,43 @@ namespace AMQPBizTalkAdapter.Helpers
                         {
                             BasicPropertiesItem item = new BasicPropertiesItem();
                             item.Key = key;
+                            if (value.GetType().IsPrimitive)
+                                item.Value = value.ToString();
+                            else
                                 item.Value = messageEncoding.GetString((byte[])value);
-                                items.Add(item);
+                            items.Add(item);
                         }
                     }
                     message.BasicProperties.Headers = items.ToArray();
                 }
             }
-
-            Guid Id = Guid.NewGuid();
+             Guid Id = Guid.NewGuid();
             if (!"GenNewGUID".Equals(messageId) &&
                 Guid.TryParse(messageId, out Id))
             {
+                message.BasicProperties.MessageId = messageId;
+            }
+            else
+            {
                 message.BasicProperties.MessageId = Id.ToString();
             }
+            
             return message;
+        }
+        public static string SerializeToString<T>(T value)
+        {
+            var emptyNamespaces = new XmlSerializerNamespaces(new[] { System.Xml.XmlQualifiedName.Empty });
+            var serializer = new XmlSerializer(value.GetType());
+            var settings = new System.Xml.XmlWriterSettings();
+            settings.Indent = true;
+            settings.OmitXmlDeclaration = true;
+
+            using (var stream = new StringWriter())
+            using (var writer = System.Xml.XmlWriter.Create(stream, settings))
+            {
+                serializer.Serialize(writer, value, emptyNamespaces);
+                return stream.ToString();
+            }
         }
     }
 }
