@@ -27,3 +27,9 @@ You can add a configuration in your machine.config  files (x86 and 64) or your B
 
 ![enter image description here](https://i.ibb.co/XyXfDbX/binding.png)
 
+##### Queue
+amqp://server:port/Queue/QueueName
+
+##### Topic
+amqp://server:port/Topic/topicname?subscriptionIdentifier
+
