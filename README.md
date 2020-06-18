@@ -5,6 +5,11 @@ recently i worked in a project that we needed to do communicates WSO2 Message br
 
 # Add Adapter as binding custom
 
+before configuration you must add to GAC of your servers:
+
+RabbitMQ.Client.dll
+amqpbiztalkadapter.dll
+
 You can add a configuration in your machine.config  files (x86 and 64) or your BTSNTSvc.config and BTSNTSvc64.config
 
 #### In <*bindingElementExtensions*> Element Add :   
