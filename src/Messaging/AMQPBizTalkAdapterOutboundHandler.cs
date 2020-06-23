@@ -48,10 +48,15 @@ namespace AMQPBizTalkAdapter
                 if (timeout.Equals(TimeSpan.Zero))
                     throw new AdapterException("time out is zero");
 
-
-
-                AmqpPublisher MessagePublisher = new AmqpPublisher(this.Connection);
                 var Encoding = System.Text.Encoding.GetEncoding((int)this.Connection.ConnectionFactory.Adapter.Encoding);
+
+                IPublisher MessagePublisher;
+
+                if (this.Connection.ConnectionFactory.Adapter.AMQP == ProtocolVersion.AMQP_0_9_1)
+                    MessagePublisher = new AmqpPublisher(this.Connection);
+                else
+                    MessagePublisher = new ActivemqNetPublisher(this.Connection);
+                
                 MessagePublisher.Publish(message, methodTracer, timeout, Encoding);
 
                 return null;

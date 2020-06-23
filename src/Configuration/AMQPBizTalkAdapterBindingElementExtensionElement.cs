@@ -49,6 +49,21 @@ namespace AMQPBizTalkAdapter
 
         #region Custom Generated Properties
 
+
+        [System.ComponentModel.Description("AMQP Protocol versiom.")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("AMQP", DefaultValue = ProtocolVersion.AMQP_0_9_1)]
+        public ProtocolVersion AMQP
+        {
+            get
+            {
+                return ((ProtocolVersion)(base["AMQP"]));
+            }
+            set
+            {
+                base["AMQP"] = value;
+            }
+        }
         [System.ComponentModel.Description("Enable all traces Levels.")]
         [System.ComponentModel.Category("Diagnostics")]
         [System.Configuration.ConfigurationProperty("enableTrace", DefaultValue = false)]
@@ -197,6 +212,7 @@ namespace AMQPBizTalkAdapter
             get
             {
                 ConfigurationPropertyCollection configProperties = base.Properties;
+                configProperties.Add(new ConfigurationProperty("AMQP", typeof(ProtocolVersion), ProtocolVersion.AMQP_0_9_1, null, null, ConfigurationPropertyOptions.None));
                 configProperties.Add(new ConfigurationProperty("EnableTrace", typeof(System.Boolean), false, null, null, ConfigurationPropertyOptions.None));
                 configProperties.Add(new ConfigurationProperty("ContentType", typeof(System.String), "text/xml", null, null, ConfigurationPropertyOptions.None));
                 configProperties.Add(new ConfigurationProperty("Encoding", typeof(EncodingEnum), EncodingEnum.UTF8, null, null, ConfigurationPropertyOptions.None));
@@ -228,6 +244,7 @@ namespace AMQPBizTalkAdapter
         {
             base.ApplyConfiguration(bindingElement);
             AMQPBizTalkAdapter adapterBinding = ((AMQPBizTalkAdapter)(bindingElement));
+            adapterBinding.AMQP = (ProtocolVersion)this["AMQP"];
             adapterBinding.EnableTrace = (System.Boolean)this["EnableTrace"];
             adapterBinding.ContentType = (System.String)this["ContentType"];
             adapterBinding.Encoding = (EncodingEnum)this["Encoding"];
@@ -246,6 +263,8 @@ namespace AMQPBizTalkAdapter
         {
             base.InitializeFrom(bindingElement);
             AMQPBizTalkAdapter adapterBinding = ((AMQPBizTalkAdapter)(bindingElement));
+
+            this["AMQP"] = adapterBinding.AMQP;
             this["EnableTrace"] = adapterBinding.EnableTrace;
             this["ContentType"] = adapterBinding.ContentType;
             this["Encoding"] = adapterBinding.Encoding;
@@ -264,6 +283,7 @@ namespace AMQPBizTalkAdapter
         {
             base.CopyFrom(from);
             AMQPBizTalkAdapterBindingElementExtensionElement adapterBinding = ((AMQPBizTalkAdapterBindingElementExtensionElement)(from));
+            this["AMQP"] = adapterBinding.AMQP;
             this["EnableTrace"] = adapterBinding.EnableTrace;
             this["ContentType"] = adapterBinding.ContentType;
             this["Encoding"] = adapterBinding.Encoding;

@@ -175,6 +175,15 @@ namespace AMQPBizTalkAdapter
             factory.RequestedConnectionTimeout = (int)openTimeOut.TotalMilliseconds;
             return factory;
         }
+
+        public Apache.NMS.AMQP.ConnectionFactory CreateNmsConnectionFactory(TimeSpan openTimeOut)
+        {
+
+            string brocketuri = String.Format("tcp://{0}:{1}",this.connectionUri.HostName, this.connectionUri.Port);
+            // Create the AMQP connection
+            var nmsConnectionFactory = new Apache.NMS.AMQP.ConnectionFactory(this.userName,this.passWord, brocketuri);
+            return nmsConnectionFactory;
+        }
         #endregion IConnection Members
     }
 }

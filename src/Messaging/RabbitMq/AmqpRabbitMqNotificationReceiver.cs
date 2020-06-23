@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace AMQPBizTalkAdapter
 {
-    internal class AmqpNotificationReceiver : AmqpReceiverBase, IReceiver
+    internal class AmqpRabbitMqNotificationReceiver : AmqpReceiverBase, IReceiver
     {
         readonly Object locker;
         readonly Encoding messageEncoding;
         readonly Uri connectionUri;
         readonly string messageId;
-        public AmqpNotificationReceiver(AMQPBizTalkAdapterConnection connection,
+        public AmqpRabbitMqNotificationReceiver(AMQPBizTalkAdapterConnection connection,
             QueueTypeEnum queueType,string queue,string keyRouting, string subscriptionId, MethodTracer methodTracer,Encoding encoding,string msgId) : 
             base(connection, queueType, methodTracer, queue, keyRouting,subscriptionId )
         {

@@ -72,6 +72,8 @@ namespace AMQPBizTalkAdapter
 
         #region Custom Generated Fields
 
+        private ProtocolVersion amqp;
+
         private bool enableTrace;
 
 
@@ -156,6 +158,22 @@ namespace AMQPBizTalkAdapter
         #endregion Public Properties
 
         #region Custom Generated Properties
+
+        [System.ComponentModel.Description("Protocol version.")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("AMQP", DefaultValue = ProtocolVersion.AMQP_0_9_1)]
+        public ProtocolVersion AMQP
+        {
+            get
+            {
+                return this.amqp;
+            }
+            set
+            {
+                this.amqp = value;
+            }
+        }
+
         [System.ComponentModel.Description("Enable all traces Levels.")]
         [System.ComponentModel.Category("Diagnostics")]
         [System.Configuration.ConfigurationProperty("enableTrace", DefaultValue = false)]
@@ -202,7 +220,7 @@ namespace AMQPBizTalkAdapter
                 this.encoding = value;
             }
         }
-        
+
 
 
         [System.ComponentModel.Description("GenNewGUID : the SendPort will generate a new guid for every message, you can put a unique Id for all messages.")]
@@ -291,6 +309,8 @@ namespace AMQPBizTalkAdapter
             {
                 if (binding == null)
                     binding = new AMQPBizTalkAdapter();
+
+                binding.AMQP = this.AMQP;
                 binding.EnableTrace = this.EnableTrace;
                 binding.ContentType = this.ContentType;
                 binding.Encoding = this.Encoding;
@@ -330,5 +350,11 @@ namespace AMQPBizTalkAdapter
         UTF32 = 12000,
         UTF16 = 1200,
         UTF8 = 65001
+    }
+    [DefaultValue(EncodingEnum.UTF8)]
+    public enum ProtocolVersion : int
+    {
+        AMQP_0_9_1 = 0,
+        AMQP_1_0 = 1
     }
 }

@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AMQPBizTalkAdapter</RootNamespace>
     <AssemblyName>AMQPBizTalkAdapter</AssemblyName>
-    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -74,12 +74,16 @@
     <Compile Include="Diagnostics\MethodTracer.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\TimeOutHelper.cs" />
+    <Compile Include="Messaging\Activemq\ActivemqPollingReceiver.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
     <Compile Include="Messaging\AmqpMessage.cs" />
-    <Compile Include="Messaging\RabbitMq\AmqpNotificationReceiver.cs" />
+    <Compile Include="Messaging\Activemq\ActivemqNotificationReceiver.cs" />
+    <Compile Include="Messaging\Activemq\ActivemqNetPublisher.cs" />
+    <Compile Include="Messaging\Amqp\IPublisher.cs" />
+    <Compile Include="Messaging\RabbitMq\AmqpRabbitMqNotificationReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpPollingReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpPublisher.cs" />
-    <Compile Include="Messaging\RabbitMq\IReceiver.cs" />
+    <Compile Include="Messaging\Amqp\IReceiver.cs" />
     <Compile Include="Messaging\RabbitMq\AmqpReceiverBase.cs" />
     <Compile Include="Messaging\ReceiveMessageBody.cs" />
     <Compile Include="MetaData\AMQPBizTalkAdapterMetadataBrowseHandler.cs" />
@@ -94,6 +98,15 @@
     <Compile Include="MetaData\MetaDataHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Apache.NMS, Version=1.8.0.0, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
+      <HintPath>packages\Apache.NMS.1.8.0\lib\net40\Apache.NMS.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.ActiveMQ, Version=1.7.2.4108, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
+      <HintPath>packages\Apache.NMS.ActiveMQ.1.7.2\lib\net40\Apache.NMS.ActiveMQ.dll</HintPath>
+    </Reference>
+    <Reference Include="Apache.NMS.AMQP, Version=1.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Apache.NMS.AMQP.1.8.1\lib\netstandard2.0\Apache.NMS.AMQP.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ExternalReferences\Microsoft.Diagnostics.Tracing.EventSource.dll</HintPath>
@@ -111,6 +124,11 @@
       <HintPath>ExternalReferences\RabbitMQ.Client.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.6.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Threading.Tasks.Dataflow.4.11.1\lib\net461\System.Threading.Tasks.Dataflow.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.IdentityModel" />
@@ -131,11 +149,14 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ExternalReferences\Amqp.Net.dll" />
     <Content Include="ExternalReferences\Microsoft.Diagnostics.Tracing.EventSource.dll" />
     <Content Include="ExternalReferences\Microsoft.ServiceModel.Channels.dll" />
     <Content Include="ExternalReferences\Microsoft.XLANGs.BaseTypes.dll" />
+    <Content Include="ExternalReferences\RabbitMQ.Client.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Key.snk" />
     <None Include="MetaData\AmqpMessage.xsd">
       <SubType>Designer</SubType>

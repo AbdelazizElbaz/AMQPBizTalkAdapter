@@ -10,7 +10,7 @@ using System.Xml;
 
 namespace AMQPBizTalkAdapter
 {
-    class AmqpPublisher
+    class AmqpPublisher :IPublisher
     {
         const string exchangeQueue = "amq.direct";
         const string exchangeTopic = "amq.topic";

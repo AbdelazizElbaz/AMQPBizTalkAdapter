@@ -7,7 +7,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using AMQPBizTalkAdapter.Messaging.AmqpNetLite;
 using Microsoft.ServiceModel.Channels.Common;
 #endregion
 
@@ -32,13 +32,29 @@ namespace AMQPBizTalkAdapter
                 //synclocker = new Object();
                 if (adapter.InboundOperationType == InboundOperationType.Notification)
                 {
-                    this.msgReceiver = new AmqpNotificationReceiver(connection,connection.ConnectionUri.QueueType,connection.ConnectionUri.QueueName,
-                        adapter.RoutingKey,connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding),adapter.MessageId);
+                    if (adapter.AMQP == ProtocolVersion.AMQP_0_9_1)
+                    {
+                        this.msgReceiver = new AmqpRabbitMqNotificationReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                            adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.MessageId);
+                    }
+                    else
+                    {
+                        this.msgReceiver = new ActivemqNotificationReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                            adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.MessageId);
+                    }
                 }
                 else
                 {
-                    this.msgReceiver = new AmqpPollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                    if (adapter.AMQP == ProtocolVersion.AMQP_0_9_1)
+                    {
+                        this.msgReceiver = new AmqpPollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
                         adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.PoolingLot, adapter.Interval);
+                    }
+                    else {
+                        this.msgReceiver = new ActivemqPollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                            adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.PoolingLot, adapter.Interval);
+
+                    }
                 }
             }
 

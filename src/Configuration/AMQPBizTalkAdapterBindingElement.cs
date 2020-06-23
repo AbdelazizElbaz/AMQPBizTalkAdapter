@@ -44,6 +44,20 @@ namespace AMQPBizTalkAdapter
         #endregion Constructors
 
         #region Custom Generated Properties
+        [System.ComponentModel.Description("Amqp protocol version.")]
+        [System.ComponentModel.Category("Message")]
+        [System.Configuration.ConfigurationProperty("AMQP", DefaultValue = ProtocolVersion.AMQP_0_9_1)]
+        public ProtocolVersion AMQP
+        {
+            get
+            {
+                return ((ProtocolVersion)(base["AMQP"]));
+            }
+            set
+            {
+                base["AMQP"] = value;
+            }
+        }
         [System.ComponentModel.Description("Enable all traces Levels.")]
         [System.ComponentModel.Category("Diagnostics")]
         [System.Configuration.ConfigurationProperty("enableTrace", DefaultValue = false)]
@@ -195,6 +209,8 @@ namespace AMQPBizTalkAdapter
         {
             base.InitializeFrom(binding);
             AMQPBizTalkAdapterBinding adapterBinding = (AMQPBizTalkAdapterBinding)binding;
+
+            this["AMQP"] = adapterBinding.AMQP;
             this["EnableTrace"] = adapterBinding.EnableTrace;
             this["ContentType"] = adapterBinding.ContentType;
             this["Encoding"] = adapterBinding.Encoding;
@@ -214,6 +230,8 @@ namespace AMQPBizTalkAdapter
                 throw new ArgumentNullException("binding");
 
             AMQPBizTalkAdapterBinding adapterBinding = (AMQPBizTalkAdapterBinding)binding;
+
+            adapterBinding.AMQP = (ProtocolVersion)this["AMQP"];
             adapterBinding.EnableTrace = (System.Boolean)this["EnableTrace"];
             adapterBinding.ContentType = (System.String)this["ContentType"];
             adapterBinding.Encoding = (EncodingEnum)this["Encoding"];
@@ -234,6 +252,8 @@ namespace AMQPBizTalkAdapter
                 if (this.properties == null)
                 {
                     ConfigurationPropertyCollection configProperties = base.Properties;
+
+                    configProperties.Add(new ConfigurationProperty("AMQP", typeof(ProtocolVersion), ProtocolVersion.AMQP_0_9_1, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("EnableTrace", typeof(System.Boolean), false, null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("ContentType", typeof(System.String), "text/xml", null, null, ConfigurationPropertyOptions.None));
                     configProperties.Add(new ConfigurationProperty("Encoding", typeof(EncodingEnum), EncodingEnum.UTF8, null, null, ConfigurationPropertyOptions.None));
@@ -253,7 +273,7 @@ namespace AMQPBizTalkAdapter
     }
     public enum InboundOperationType
     {
-        Pooling,
+        Polling,
         Notification
     }
 }

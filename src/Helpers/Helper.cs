@@ -187,6 +187,71 @@ namespace AMQPBizTalkAdapter.Helpers
             
             return message;
         }
+        public static ReceiveMessage GetReceiveMessage(Apache.NMS.IMessage activemqMessage, MethodTracer methodTracer, Encoding messageEncoding, string messageId)
+        {
+
+            if (activemqMessage == null)
+            {
+                return null;
+            }
+            ReceiveMessage message = new ReceiveMessage();
+           /* message.Body = messageEncoding.GetString(e.Body);
+            message.DeliveryTag = e.DeliveryTag;
+            message.ConsumerTag = e.ConsumerTag;
+            message.Exchange = e.Exchange;
+            message.Redelivered = e.Redelivered;
+            message.RoutingKey = e.RoutingKey;
+            if (e.BasicProperties != null)
+            {
+                message.BasicProperties = new BasicProperties();
+                message.BasicProperties.AppId = e.BasicProperties.AppId;
+                message.BasicProperties.ClusterId = e.BasicProperties.ClusterId;
+                message.BasicProperties.ContentEncoding = e.BasicProperties.ContentEncoding;
+                message.BasicProperties.ContentType = e.BasicProperties.ContentType;
+                message.BasicProperties.CorrelationId = e.BasicProperties.CorrelationId;
+                message.BasicProperties.DeliveryMode = e.BasicProperties.DeliveryMode;
+                message.BasicProperties.Expiration = e.BasicProperties.Expiration;
+                message.BasicProperties.MessageId = e.BasicProperties.MessageId;
+                message.BasicProperties.Priority = e.BasicProperties.Priority;
+                message.BasicProperties.ReplyTo = e.BasicProperties.ReplyTo;
+                message.BasicProperties.Timestamp = e.BasicProperties.Timestamp.UnixTime;
+                message.BasicProperties.Type = e.BasicProperties.Type;
+                message.BasicProperties.UserId = e.BasicProperties.UserId;
+                message.BasicProperties.ProtocolClassId = e.BasicProperties.ProtocolClassId;
+                message.BasicProperties.ProtocolClassName = e.BasicProperties.ProtocolClassName;
+                if (e.BasicProperties.Headers != null && e.BasicProperties.Headers.Count > 0)
+                {
+                    List<BasicPropertiesItem> items = new List<BasicPropertiesItem>();
+                    foreach (string key in e.BasicProperties.Headers.Keys)
+                    {
+                        object value = e.BasicProperties.Headers[key];
+                        if (value != null)
+                        {
+                            BasicPropertiesItem item = new BasicPropertiesItem();
+                            item.Key = key;
+                            if (value.GetType().IsPrimitive)
+                                item.Value = value.ToString();
+                            else
+                                item.Value = messageEncoding.GetString((byte[])value);
+                            items.Add(item);
+                        }
+                    }
+                    message.BasicProperties.Headers = items.ToArray();
+                }
+            }
+            Guid Id = Guid.NewGuid();
+            if (!"GenNewGUID".Equals(messageId) &&
+                Guid.TryParse(messageId, out Id))
+            {
+                message.BasicProperties.MessageId = messageId;
+            }
+            else
+            {
+                message.BasicProperties.MessageId = Id.ToString();
+            }*/
+
+            return message;
+        }
         public static string SerializeToString<T>(T value)
         {
             var emptyNamespaces = new XmlSerializerNamespaces(new[] { System.Xml.XmlQualifiedName.Empty });

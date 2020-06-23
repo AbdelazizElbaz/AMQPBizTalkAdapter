@@ -26,6 +26,8 @@ namespace AMQPBizTalkAdapter
 
         #region Custom Generated Fields
 
+        private ProtocolVersion amqp;
+
         private bool enableTrace;
 
 
@@ -67,6 +69,7 @@ namespace AMQPBizTalkAdapter
         public AMQPBizTalkAdapter(AMQPBizTalkAdapter binding)
             : base(binding)
         {
+            this.AMQP = binding.AMQP;
             this.EnableTrace = binding.EnableTrace;
             this.ContentType = binding.ContentType;
             this.Encoding = binding.Encoding;
@@ -79,6 +82,19 @@ namespace AMQPBizTalkAdapter
         #endregion Constructor
 
         #region Custom Generated Properties
+
+        [System.Configuration.ConfigurationProperty("AMQP", DefaultValue = ProtocolVersion.AMQP_0_9_1)]
+        public ProtocolVersion AMQP
+        {
+            get
+            {
+                return this.amqp;
+            }
+            set
+            {
+                this.amqp = value;
+            }
+        }
 
         [System.Configuration.ConfigurationProperty("enableTrace", DefaultValue = false)]
         public bool EnableTrace
