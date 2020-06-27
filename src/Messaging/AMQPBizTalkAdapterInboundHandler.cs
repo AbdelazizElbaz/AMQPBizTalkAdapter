@@ -39,7 +39,7 @@ namespace AMQPBizTalkAdapter
                     }
                     else
                     {
-                        this.msgReceiver = new ActivemqNotificationReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                        this.msgReceiver = new AmqpNetLiteNotificationReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
                             adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.MessageId);
                     }
                 }
@@ -51,7 +51,7 @@ namespace AMQPBizTalkAdapter
                         adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.PoolingLot, adapter.Interval);
                     }
                     else {
-                        this.msgReceiver = new ActivemqPollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
+                        this.msgReceiver = new AmqpNetLitePollingReceiver(connection, connection.ConnectionUri.QueueType, connection.ConnectionUri.QueueName,
                             adapter.RoutingKey, connection.ConnectionUri.SubscriptionIdentifier, methodTracer, GetMessageEncoding(adapter.Encoding), adapter.PoolingLot, adapter.Interval);
 
                     }

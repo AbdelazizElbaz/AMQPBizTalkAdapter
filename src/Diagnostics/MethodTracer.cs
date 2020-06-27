@@ -33,7 +33,7 @@ namespace AMQPBizTalkAdapter
             return new MethodTracer(AMQPBizTalkAdapterTracer.Trace, new StackFrame(1, true).GetMethod().Name, EventCode, enableTrace);
         }
     }
-    internal class MethodTracer : IDisposable
+    public class MethodTracer : IDisposable
     {
         private readonly AdapterTrace mTrace;
 

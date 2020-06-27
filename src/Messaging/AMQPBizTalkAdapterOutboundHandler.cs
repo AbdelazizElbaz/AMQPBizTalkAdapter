@@ -55,7 +55,7 @@ namespace AMQPBizTalkAdapter
                 if (this.Connection.ConnectionFactory.Adapter.AMQP == ProtocolVersion.AMQP_0_9_1)
                     MessagePublisher = new AmqpPublisher(this.Connection);
                 else
-                    MessagePublisher = new ActivemqNetPublisher(this.Connection);
+                    MessagePublisher = new AmqpNetLitePublisher(this.Connection);
                 
                 MessagePublisher.Publish(message, methodTracer, timeout, Encoding);
 

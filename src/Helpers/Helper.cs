@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Amqp;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -96,24 +97,24 @@ namespace AMQPBizTalkAdapter.Helpers
             return body;
         }
 
-        public static Message CreateWcfMessage(ReceiveMessage message, Uri uri)
+        public static System.ServiceModel.Channels.Message CreateWcfMessage(ReceiveMessage message, Uri uri)
         {
             System.Xml.XmlReader reader = System.Xml.XmlReader.Create(new StringReader(SerializeToString<ReceiveMessage>(message)));
             // create WCF message  
-            Message chMessage = Message.CreateMessage(MessageVersion.Default
+            System.ServiceModel.Channels.Message chMessage = System.ServiceModel.Channels.Message.CreateMessage(MessageVersion.Default
                         , MetaDataHelper.ReceiveOperationNodeId
                         , reader);
 
             chMessage.Headers.To = uri;
             return chMessage;
         }
-        public static Message CreateWcfMessage(List<ReceiveMessage> messages, Uri uri)
+        public static System.ServiceModel.Channels.Message CreateWcfMessage(List<ReceiveMessage> messages, Uri uri)
         {
             ReceiveMessageBody bodyWriter = new ReceiveMessageBody(messages);
 
-          
+
             // create WCF message  
-            Message chMessage = Message.CreateMessage(MessageVersion.Default
+            System.ServiceModel.Channels.Message chMessage = System.ServiceModel.Channels.Message.CreateMessage(MessageVersion.Default
                         , MetaDataHelper.ReceiveOperationNodeId
                         , bodyWriter);
 
@@ -187,14 +188,18 @@ namespace AMQPBizTalkAdapter.Helpers
             
             return message;
         }
-        public static ReceiveMessage GetReceiveMessage(Apache.NMS.IMessage activemqMessage, MethodTracer methodTracer, Encoding messageEncoding, string messageId)
+        public static ReceiveMessage GetReceiveMessage(Amqp.Message amqpMessage, MethodTracer methodTracer, Encoding messageEncoding, string messageId)
         {
 
-            if (activemqMessage == null)
+            if (amqpMessage == null)
             {
                 return null;
             }
             ReceiveMessage message = new ReceiveMessage();
+
+            message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
+            message.BasicProperties = new BasicProperties();
+            message.BasicProperties.MessageId = amqpMessage.Properties.MessageId;
            /* message.Body = messageEncoding.GetString(e.Body);
             message.DeliveryTag = e.DeliveryTag;
             message.ConsumerTag = e.ConsumerTag;

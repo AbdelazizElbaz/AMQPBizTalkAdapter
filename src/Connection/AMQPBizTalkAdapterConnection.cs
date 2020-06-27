@@ -176,13 +176,15 @@ namespace AMQPBizTalkAdapter
             return factory;
         }
 
-        public Apache.NMS.AMQP.ConnectionFactory CreateNmsConnectionFactory(TimeSpan openTimeOut)
+        public AmqpNetLiteConnectionFactory CreateAmqpNetLitConnectionFactory(TimeSpan openTimeOut)
         {
+            string brocketuri = String.Format("amqp://{0}:{1}@{2}:{3}", this.userName, this.passWord,this.connectionUri.HostName, this.connectionUri.Port);
 
-            string brocketuri = String.Format("tcp://{0}:{1}",this.connectionUri.HostName, this.connectionUri.Port);
+            Amqp.Address Amqpaddress = new Amqp.Address(brocketuri);
+
             // Create the AMQP connection
-            var nmsConnectionFactory = new Apache.NMS.AMQP.ConnectionFactory(this.userName,this.passWord, brocketuri);
-            return nmsConnectionFactory;
+            var amqpNetLitConnectionFactory = new AmqpNetLiteConnectionFactory(Amqpaddress);
+            return amqpNetLitConnectionFactory;
         }
         #endregion IConnection Members
     }
