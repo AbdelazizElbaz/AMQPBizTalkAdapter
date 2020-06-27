@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AMQPBizTalkAdapter</RootNamespace>
     <AssemblyName>AMQPBizTalkAdapter</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>2.0</OldToolsVersion>
@@ -74,7 +74,7 @@
     <Compile Include="Diagnostics\MethodTracer.cs" />
     <Compile Include="Helpers\Helper.cs" />
     <Compile Include="Helpers\TimeOutHelper.cs" />
-    <Compile Include="Messaging\AmqpNetLite\AmqpNetLitepollingReceiver.cs" />
+    <Compile Include="Messaging\AmqpNetLite\AmqpNetLitePollingReceiver.cs" />
     <Compile Include="Messaging\AmqpNetLite\AmqpNetLiteConnectionFactory.cs" />
     <Compile Include="Messaging\AMQPBizTalkAdapterInboundHandler.cs" />
     <Compile Include="Messaging\AmqpMessage.cs" />
@@ -101,8 +101,8 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Amqp.Net, Version=2.1.0.0, Culture=neutral, PublicKeyToken=905a7b1e6458e0c3, processorArchitecture=MSIL">
-      <HintPath>packages\AMQPNetLite.2.4.0\lib\net45\Amqp.Net.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ExternalReferences\Amqp.Net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Diagnostics.Tracing.EventSource, Version=1.1.28.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -158,6 +158,5 @@
     <None Include="MetaData\AmqpMessage.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
   </ItemGroup>
 </Project>

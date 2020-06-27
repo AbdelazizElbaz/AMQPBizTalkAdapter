@@ -197,11 +197,11 @@ namespace AMQPBizTalkAdapter.Helpers
             }
             ReceiveMessage message = new ReceiveMessage();
 
-            message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
+            /*message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
             message.BasicProperties = new BasicProperties();
-            message.BasicProperties.MessageId = amqpMessage.Properties.MessageId;
-           /* message.Body = messageEncoding.GetString(e.Body);
-            message.DeliveryTag = e.DeliveryTag;
+            message.BasicProperties.MessageId = amqpMessage.Properties.MessageId;*/
+            message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
+            /*message.DeliveryTag = amqpMessage.DeliveryTag;
             message.ConsumerTag = e.ConsumerTag;
             message.Exchange = e.Exchange;
             message.Redelivered = e.Redelivered;
@@ -243,7 +243,7 @@ namespace AMQPBizTalkAdapter.Helpers
                     }
                     message.BasicProperties.Headers = items.ToArray();
                 }
-            }
+            }*/
             Guid Id = Guid.NewGuid();
             if (!"GenNewGUID".Equals(messageId) &&
                 Guid.TryParse(messageId, out Id))
@@ -253,7 +253,7 @@ namespace AMQPBizTalkAdapter.Helpers
             else
             {
                 message.BasicProperties.MessageId = Id.ToString();
-            }*/
+            }
 
             return message;
         }
