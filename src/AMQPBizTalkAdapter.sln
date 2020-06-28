@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30011.22
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMQPBizTalkAdapter", "AMQPBizTalkAdapter.csproj", "{F49A28D2-7B38-40DD-8D25-074EDD763886}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMQPBizTalkAdapter", "AMQPBizTalkAdapter\AMQPBizTalkAdapter.csproj", "{F49A28D2-7B38-40DD-8D25-074EDD763886}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AMQPBizTalkAdapter.Schemas", "AMQPBizTalkAdapter.Schemas\AMQPBizTalkAdapter.Schemas.btproj", "{867DADC7-406C-48D8-86B3-949D50E5B150}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,12 @@ Global
 		{F49A28D2-7B38-40DD-8D25-074EDD763886}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F49A28D2-7B38-40DD-8D25-074EDD763886}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F49A28D2-7B38-40DD-8D25-074EDD763886}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867DADC7-406C-48D8-86B3-949D50E5B150}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
