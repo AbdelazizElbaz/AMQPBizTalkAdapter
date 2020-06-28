@@ -1,4 +1,0 @@
-\\SFPFI4335.PROD.MRQ\Usagers-DGTT\rela019\Documents\GitHub\AMQPBizTalkAdapter\src\AMQPBizTalkAdapter.Schemas\bin\Debug\AMQPBizTalkAdapter.Schemas.dll
-\\SFPFI4335.PROD.MRQ\Usagers-DGTT\rela019\Documents\GitHub\AMQPBizTalkAdapter\src\AMQPBizTalkAdapter.Schemas\bin\Debug\AMQPBizTalkAdapter.Schemas.pdb
-\\SFPFI4335.PROD.MRQ\Usagers-DGTT\rela019\Documents\GitHub\AMQPBizTalkAdapter\src\AMQPBizTalkAdapter.Schemas\obj\Debug\AMQPBizTalkAdapter.Schemas.dll
-\\SFPFI4335.PROD.MRQ\Usagers-DGTT\rela019\Documents\GitHub\AMQPBizTalkAdapter\src\AMQPBizTalkAdapter.Schemas\obj\Debug\AMQPBizTalkAdapter.Schemas.pdb
