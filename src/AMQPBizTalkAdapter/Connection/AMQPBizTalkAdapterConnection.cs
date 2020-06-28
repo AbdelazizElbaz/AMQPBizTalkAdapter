@@ -183,7 +183,7 @@ namespace AMQPBizTalkAdapter
             Amqp.Address Amqpaddress = new Amqp.Address(brocketuri);
 
             // Create the AMQP connection
-            var amqpNetLitConnectionFactory = new AmqpNetLiteConnectionFactory(Amqpaddress);
+            var amqpNetLitConnectionFactory = new AmqpNetLiteConnectionFactory(Amqpaddress,this.connectionUri.SubscriptionIdentifier);
             return amqpNetLitConnectionFactory;
         }
         #endregion IConnection Members

@@ -11,13 +11,15 @@ namespace AMQPBizTalkAdapter
     public class AmqpNetLiteConnectionFactory
     {
         public Address Address { get; set; }
-        public AmqpNetLiteConnectionFactory(Address address)
+        public string clientId;
+        public AmqpNetLiteConnectionFactory(Address address,string clientId)
         {
             this.Address = address;
+            this.clientId = clientId;
         }
         public Amqp.Connection CreateConnection()
         {
-            return new Connection(this.Address);
+            return new Connection(this.Address, Amqp.Sasl.SaslProfile.Anonymous, new Amqp.Framing.Open() { ContainerId = clientId },null);
         }
     }
 }

@@ -106,7 +106,6 @@ namespace AMQPBizTalkAdapter.Messaging.AmqpNetLite
                                 result = false;
                             }
                         }
-                        //}
                     }
                     catch (Exception ex)
                     {

@@ -48,15 +48,26 @@ namespace AMQPBizTalkAdapter
             Modified defaultOutcome = new Modified();
             defaultOutcome.DeliveryFailed = true;
             defaultOutcome.UndeliverableHere = false;
+            if (queueType == QueueTypeEnum.Queue)
+            {
+                source.Capabilities = new[] { new Symbol("queue") };
+            }
+            else if(queueType == QueueTypeEnum.Topic)
+            {
+                source.Capabilities = new[] { new Symbol("topic") };
+            }
 
             // Configure Source.
             source.DefaultOutcome = defaultOutcome;
             source.Outcomes = outcomes;
             // Create a Durable Consumer Source.
             source.Address = this.queueType == QueueTypeEnum.Queue ? this.queueName : string.Format("topic://{0}", this.queueName);
+
+            //durable
             source.ExpiryPolicy = new Symbol("never");
             source.Durable = 2;//Durable
             source.DistributionMode = new Symbol("copy");
+
             return source;
         }
 
@@ -65,16 +76,16 @@ namespace AMQPBizTalkAdapter
         {
             try
             {
-                /* lock (locker)
-                 {*/
-                this.amqpconnection = amqpBizTalkAdapterConnection.CreateAmqpNetLitConnectionFactory(timeout).CreateConnection();
-                methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Start listening uri= {0}", this.amqpBizTalkAdapterConnection.ConnectionUri.ToString()));
-                this.amqpsession = new Session(this.amqpconnection);
-                this.receiver = new ReceiverLink(this.amqpsession, this.subscriptionIdentifier, this.queueType == QueueTypeEnum.Queue ? this.queueName : string.Format("topic://{0}", this.queueName));// CreateDurableSource(), null);
-                receiveTimer = new System.Timers.Timer(500);
-                receiveTimer.Elapsed += ReceiveTimer_Elapsed;
-                receiveTimer.Start();
-                //}
+                lock (locker)
+                {
+                    this.amqpconnection = amqpBizTalkAdapterConnection.CreateAmqpNetLitConnectionFactory(timeout).CreateConnection();
+                    methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Start listening uri= {0}", this.amqpBizTalkAdapterConnection.ConnectionUri.ToString()));
+                    this.amqpsession = new Session(this.amqpconnection);
+                    this.receiver = new ReceiverLink(this.amqpsession, this.subscriptionIdentifier, CreateDurableSource(), null);
+                    receiveTimer = new System.Timers.Timer(100);
+                    receiveTimer.Elapsed += ReceiveTimer_Elapsed;
+                    receiveTimer.Start();
+                }
             }
             catch (Exception exception)
             {
@@ -107,12 +118,12 @@ namespace AMQPBizTalkAdapter
                 {
                     this.closed = true;
 
-                    if (receiver != null)
+                    /*if (receiver != null)
                         receiver.Close();
                     if (amqpsession != null)
                         amqpsession.Close();
                     if (amqpconnection != null)
-                        this.amqpconnection.Close();
+                        this.amqpconnection.Close();*/
                 }
             }
             catch (Exception exception)

@@ -198,10 +198,9 @@ namespace AMQPBizTalkAdapter.Helpers
             ReceiveMessage message = new ReceiveMessage();
             message.BasicProperties = new BasicProperties();
 
-            /*message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
-           
-            message.BasicProperties.MessageId = amqpMessage.Properties.MessageId;*/
             message.Body = messageEncoding.GetString(amqpMessage.GetBody<Byte[]>());
+            message.BasicProperties.ContentEncoding = messageEncoding.ToString();
+            
             /*message.DeliveryTag = amqpMessage.DeliveryTag;
             message.ConsumerTag = e.ConsumerTag;
             message.Exchange = e.Exchange;

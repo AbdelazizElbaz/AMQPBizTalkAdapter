@@ -8,10 +8,10 @@ using System.Xml;
 
 namespace AMQPBizTalkAdapter
 {
-     public class AmqpNetLitePublisher : IPublisher 
+    public class AmqpNetLitePublisher : IPublisher
     {
         AMQPBizTalkAdapterConnection connection;
-       
+
         private bool IsQueue
         {
             get
@@ -53,22 +53,22 @@ namespace AMQPBizTalkAdapter
                     amqpmessage.Properties = new Amqp.Framing.Properties();
                     amqpmessage.Properties.MessageId = request.BasicProperties.MessageId;
 
-                    var AmqpNetLitConnectionFactory = connection.CreateAmqpNetLitConnectionFactory(openTimeOut);
-                    var amqpConnection = new Amqp.Connection(new Amqp.Address("http://admin:admin@localhost:5672"));//  AmqpNetLitConnectionFactory.CreateConnection();
-                                                                                                                    // Create the AMQP session
+                    var amqpConnection = connection.CreateAmqpNetLitConnectionFactory(openTimeOut).CreateConnection();
+                    // Create the AMQP session
                     var amqpsession = new Amqp.Session(amqpConnection);
+                    string name = string.Format("{0}_BizTalkAdapter", this.QueueName);
                     if (IsQueue)
                     {
                         methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Publish Message to Queue :   " + this.QueueName);
                         //Queue
-                        var producer = new Amqp.SenderLink(amqpsession, "Client", this.QueueName);// bydefault it send to queue
+                        var producer = new Amqp.SenderLink(amqpsession, name, this.QueueName);// bydefault it send to queue
                         producer.Send(amqpmessage);
                     }
                     else
                     {
                         methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "Publish Message to Topic :   " + this.QueueName);
                         //Topic
-                        var producer = new Amqp.SenderLink(amqpsession, this.QueueName, string.Format("topic://{0}", this.QueueName));// topic://topicname to send to topic
+                        var producer = new Amqp.SenderLink(amqpsession, name, string.Format("topic://{0}", this.QueueName));// topic://topicname to send to topic
                         producer.Send(amqpmessage, openTimeOut);
                     }
                 }
@@ -80,6 +80,6 @@ namespace AMQPBizTalkAdapter
             }
             methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, "End ActivemqNetPublisher.Publish");
         }
-        
+
     }
 }
