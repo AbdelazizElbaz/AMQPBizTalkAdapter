@@ -25,7 +25,7 @@ namespace AMQPBizTalkAdapter
         string queueName;
         string subscriptionIdentifier;
         Queue<Amqp.Message> inboundQueue;
-
+        TimeSpan startTimeout;
         private AmqpNetLiteReceiver() { }
         public AmqpNetLiteReceiver(AMQPBizTalkAdapterConnection bizTalkconnection, QueueTypeEnum queueType, string queueName, string subscriptionIdentifier)
         {
@@ -52,7 +52,7 @@ namespace AMQPBizTalkAdapter
             {
                 source.Capabilities = new[] { new Symbol("queue") };
             }
-            else if(queueType == QueueTypeEnum.Topic)
+            else if (queueType == QueueTypeEnum.Topic)
             {
                 source.Capabilities = new[] { new Symbol("topic") };
             }
@@ -78,6 +78,7 @@ namespace AMQPBizTalkAdapter
             {
                 lock (locker)
                 {
+                    startTimeout = timeout;
                     this.amqpconnection = amqpBizTalkAdapterConnection.CreateAmqpNetLitConnectionFactory(timeout).CreateConnection();
                     methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Start listening uri= {0}", this.amqpBizTalkAdapterConnection.ConnectionUri.ToString()));
                     this.amqpsession = new Session(this.amqpconnection);
@@ -100,12 +101,19 @@ namespace AMQPBizTalkAdapter
             receiveTimer.Stop();
             if (!this.closed)
             {
+                if (receiver.IsClosed)
+                {
+                    this.amqpconnection = amqpBizTalkAdapterConnection.CreateAmqpNetLitConnectionFactory(startTimeout).CreateConnection();
+                    this.amqpsession = new Session(this.amqpconnection);
+                    this.receiver = new ReceiverLink(this.amqpsession, this.subscriptionIdentifier, CreateDurableSource(), null);
+                }
                 Message message = receiver.Receive(new TimeSpan(0, 0, 1));
                 if (message != null)
                 {
                     lock (locker) { inboundQueue.Enqueue(message); }
                 }
             }
+
             receiveTimer.Start();
         }
 
