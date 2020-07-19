@@ -71,7 +71,6 @@ namespace AMQPBizTalkAdapter
             return source;
         }
 
-
         public void Start(TimeSpan timeout, MethodTracer methodTracer)
         {
             try
@@ -83,9 +82,9 @@ namespace AMQPBizTalkAdapter
                     methodTracer.TraceData(System.Diagnostics.TraceEventType.Verbose, string.Format("Start listening uri= {0}", this.amqpBizTalkAdapterConnection.ConnectionUri.ToString()));
                     this.amqpsession = new Session(this.amqpconnection);
                     this.receiver = new ReceiverLink(this.amqpsession, this.subscriptionIdentifier, CreateDurableSource(), null);
-                    receiveTimer = new System.Timers.Timer(100);
-                    receiveTimer.Elapsed += ReceiveTimer_Elapsed;
-                    receiveTimer.Start();
+                    //receiveTimer = new System.Timers.Timer(100);
+                    //receiveTimer.Elapsed += ReceiveTimer_Elapsed;
+                   // receiveTimer.Start();
                 }
             }
             catch (Exception exception)
@@ -96,7 +95,7 @@ namespace AMQPBizTalkAdapter
             }
         }
 
-        private void ReceiveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        /*private void ReceiveTimer_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             receiveTimer.Stop();
             if (!this.closed)
@@ -114,8 +113,8 @@ namespace AMQPBizTalkAdapter
                 }
             }
 
-            receiveTimer.Start();
-        }
+           // receiveTimer.Start();
+        }*/
 
         public void Stop(TimeSpan timeout, MethodTracer methodTracer)
         {
@@ -147,11 +146,31 @@ namespace AMQPBizTalkAdapter
             List<Message> msgs = new List<Message>();
             lock (locker)
             {
-                int count = inboundQueue.Count >= lot ? lot : inboundQueue.Count;
-                for (int i = 0; i < count; i++)
+                // int count = inboundQueue.Count >= lot ? lot : inboundQueue.Count;
+                //for (int i = 0; i < count; i++)
+                // {
+                //   msgs.Add(inboundQueue.Dequeue());
+                //}
+
+                if (!this.closed)
                 {
-                    msgs.Add(inboundQueue.Dequeue());
+                    if (receiver.IsClosed)
+                    {
+                        this.amqpconnection = amqpBizTalkAdapterConnection.CreateAmqpNetLitConnectionFactory(startTimeout).CreateConnection();
+                        this.amqpsession = new Session(this.amqpconnection);
+                        this.receiver = new ReceiverLink(this.amqpsession, this.subscriptionIdentifier, CreateDurableSource(), null);
+                    }
+                    Message message = receiver.Receive(new TimeSpan(0, 0, 1));
+                    if (message != null)
+                    {
+                        lock (locker) { inboundQueue.Enqueue(message); }
+                    }
                 }
+                for (int i = 0; i < lot; i++)
+                 {
+                   msgs.Add(this.receiver.Receive(startTimeout));
+                }
+                
             }
             return msgs;
         }
@@ -172,10 +191,11 @@ namespace AMQPBizTalkAdapter
         {
             get
             {
-                lock (locker)
-                {
-                    return inboundQueue.Count > 0;
-                }
+                //lock (locker)
+                //{
+                    //return inboundQueue.Count > 0;
+                    return true;
+                //}
             }
 
         }
